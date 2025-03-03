@@ -74,6 +74,8 @@ const Index = () => {
       <main>
         <Hero />
         
+        <ProfileAnalyzer />
+        
         <section id="features" className="py-20">
           <div className="container-custom">
             <div className="max-w-3xl mx-auto text-center mb-16">
@@ -89,14 +91,12 @@ const Index = () => {
                   key={index}
                   {...feature}
                   className="animate-fade-up"
-                  style={{ animationDelay: `${index * 0.1}s` }}
+                  animationDelay={`${index * 0.1}s`}
                 />
               ))}
             </div>
           </div>
         </section>
-        
-        <ProfileAnalyzer />
         
         <OptimizationTips />
         

@@ -152,7 +152,7 @@ const ProfileAnalyzer: React.FC = () => {
                   key={index}
                   {...section}
                   className="animate-fade-up"
-                  style={{ animationDelay: `${index * 0.1}s` }}
+                  animationDelay={`${index * 0.1}s`}
                 />
               ))}
             </div>
