@@ -7,19 +7,24 @@ interface FeatureCardProps {
   description: string;
   icon: React.ReactNode;
   className?: string;
+  animationDelay?: string;
 }
 
 const FeatureCard: React.FC<FeatureCardProps> = ({ 
   title, 
   description, 
   icon,
-  className
+  className,
+  animationDelay
 }) => {
   return (
-    <div className={cn(
-      "glass-card p-6 h-full animate-fade-up",
-      className
-    )}>
+    <div 
+      className={cn(
+        "glass-card p-6 h-full animate-fade-up",
+        className
+      )}
+      style={animationDelay ? { animationDelay } : undefined}
+    >
       <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary mb-4">
         {icon}
       </div>

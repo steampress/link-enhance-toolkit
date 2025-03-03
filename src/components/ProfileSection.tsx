@@ -10,6 +10,7 @@ interface ProfileSectionProps {
   description: string;
   recommendations: string[];
   className?: string;
+  animationDelay?: string;
 }
 
 const ProfileSection: React.FC<ProfileSectionProps> = ({
@@ -18,7 +19,8 @@ const ProfileSection: React.FC<ProfileSectionProps> = ({
   status,
   description,
   recommendations,
-  className
+  className,
+  animationDelay
 }) => {
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -39,7 +41,10 @@ const ProfileSection: React.FC<ProfileSectionProps> = ({
   };
 
   return (
-    <div className={cn("glass-card p-6", className)}>
+    <div 
+      className={cn("glass-card p-6", className)}
+      style={animationDelay ? { animationDelay } : undefined}
+    >
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-lg font-semibold">{title}</h3>
         <div className="flex items-center space-x-4">
