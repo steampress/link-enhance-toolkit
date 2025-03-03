@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
@@ -20,7 +19,7 @@ export const Tip: React.FC<TipProps> = ({
     <Card className={cn("h-full border border-border/50 transition-all duration-300 hover:border-accent/40 hover:shadow-soft", className)}>
       <CardHeader className="pb-2">
         <div className="flex items-center justify-between mb-1.5">
-          <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-accent/10 text-accent-foreground">
+          <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-primary/20 text-primary font-semibold">
             {tag}
           </span>
         </div>
@@ -83,7 +82,6 @@ const OptimizationTips: React.FC = () => {
               key={index}
               {...tip}
               className="animate-fade-up"
-              style={{ animationDelay: `${index * 0.1}s` }}
             />
           ))}
         </div>
