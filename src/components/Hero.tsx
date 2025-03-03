@@ -8,7 +8,7 @@ const Hero: React.FC = () => {
       <div className="container-custom">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div className="space-y-6 animate-fade-up">
-            <div className="inline-block px-3 py-1 rounded-full bg-accent/10 text-accent-foreground border border-accent/20 text-sm font-medium animate-fade-in" style={{ animationDelay: '0.2s' }}>
+            <div className="inline-block px-3 py-1 rounded-full bg-primary/20 text-primary font-medium animate-fade-in" style={{ animationDelay: '0.2s' }}>
               Elevate Your Professional Presence
             </div>
             
