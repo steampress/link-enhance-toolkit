@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Landscape, Download, RefreshCw } from 'lucide-react';
+import { Image, Download, RefreshCw } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface BackgroundImageGeneratorProps {
@@ -73,7 +73,7 @@ const BackgroundImageGenerator: React.FC<BackgroundImageGeneratorProps> = ({ cla
             </>
           ) : (
             <>
-              <Landscape className="mr-2 h-4 w-4" />
+              <Image className="mr-2 h-4 w-4" />
               Generate Background
             </>
           )}

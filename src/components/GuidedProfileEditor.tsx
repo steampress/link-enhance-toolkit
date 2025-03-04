@@ -11,13 +11,23 @@ interface GuidedProfileEditorProps {
   className?: string;
 }
 
+interface Question {
+  id: string;
+  label: string;
+  multiline?: boolean;
+}
+
 const GuidedProfileEditor: React.FC<GuidedProfileEditorProps> = ({ section, className }) => {
   const [step, setStep] = useState(0);
   const [responses, setResponses] = useState<Record<string, string>>({});
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedContent, setGeneratedContent] = useState('');
 
-  const sectionConfig = {
+  const sectionConfig: Record<string, {
+    title: string;
+    description: string;
+    questions: Question[];
+  }> = {
     headline: {
       title: 'Headline Creator',
       description: 'Create a compelling headline that highlights your professional identity and value.',
