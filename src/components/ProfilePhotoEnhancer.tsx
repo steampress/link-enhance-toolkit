@@ -1,7 +1,7 @@
 
 import React, { useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
-import { Upload, Image, Camera, RefreshCw } from 'lucide-react';
+import { Upload, Image as ImageIcon, Camera, RefreshCw } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface ProfilePhotoEnhancerProps {
@@ -42,7 +42,7 @@ const ProfilePhotoEnhancer: React.FC<ProfilePhotoEnhancerProps> = ({ className }
     setIsEnhancing(true);
     
     // Create an image element from the original photo
-    const img = new Image();
+    const img = document.createElement('img');
     img.onload = () => {
       // Create a canvas for processing
       const canvas = canvasRef.current;
@@ -195,7 +195,7 @@ const ProfilePhotoEnhancer: React.FC<ProfilePhotoEnhancerProps> = ({ className }
             </div>
           ) : (
             <div className="bg-secondary/30 rounded-lg flex items-center justify-center w-48 h-48 mb-4">
-              <Image className="h-10 w-10 text-muted-foreground" />
+              <ImageIcon className="h-10 w-10 text-muted-foreground" />
             </div>
           )}
           <div className="flex gap-2">
@@ -211,7 +211,7 @@ const ProfilePhotoEnhancer: React.FC<ProfilePhotoEnhancerProps> = ({ className }
                 </>
               ) : (
                 <>
-                  <Image className="mr-2 h-4 w-4" />
+                  <ImageIcon className="mr-2 h-4 w-4" />
                   Remove Background
                 </>
               )}
