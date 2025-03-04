@@ -5,13 +5,18 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import ProfileScore from '@/components/ui/ProfileScore';
 import ProfileSection from '@/components/ProfileSection';
+import ProfilePhotoEnhancer from '@/components/ProfilePhotoEnhancer';
+import BackgroundImageGenerator from '@/components/BackgroundImageGenerator';
+import GuidedProfileEditor from '@/components/GuidedProfileEditor';
 import { toast } from 'sonner';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 const ProfileAnalyzer: React.FC = () => {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [isAnalyzed, setIsAnalyzed] = useState(false);
   const [profileUrl, setProfileUrl] = useState('');
   const [profileContent, setProfileContent] = useState('');
+  const [activeTab, setActiveTab] = useState('recommendations');
 
   const handleAnalyze = () => {
     if (!profileUrl && !profileContent) {
@@ -146,16 +151,43 @@ const ProfileAnalyzer: React.FC = () => {
               </div>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {sections.map((section, index) => (
-                <ProfileSection
-                  key={index}
-                  {...section}
-                  className="animate-fade-up"
-                  animationDelay={`${index * 0.1}s`}
-                />
-              ))}
-            </div>
+            <Tabs defaultValue="recommendations" className="mb-8" value={activeTab} onValueChange={setActiveTab}>
+              <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 mb-6">
+                <TabsTrigger value="recommendations">Recommendations</TabsTrigger>
+                <TabsTrigger value="profile-photo">Profile Photo</TabsTrigger>
+                <TabsTrigger value="background">Background</TabsTrigger>
+                <TabsTrigger value="content">Content Editor</TabsTrigger>
+              </TabsList>
+              
+              <TabsContent value="recommendations">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {sections.map((section, index) => (
+                    <ProfileSection
+                      key={index}
+                      {...section}
+                      className="animate-fade-up"
+                      animationDelay={`${index * 0.1}s`}
+                    />
+                  ))}
+                </div>
+              </TabsContent>
+              
+              <TabsContent value="profile-photo">
+                <ProfilePhotoEnhancer className="animate-fade-up" />
+              </TabsContent>
+              
+              <TabsContent value="background">
+                <BackgroundImageGenerator className="animate-fade-up" />
+              </TabsContent>
+              
+              <TabsContent value="content">
+                <div className="space-y-8 animate-fade-up">
+                  <GuidedProfileEditor section="headline" />
+                  <GuidedProfileEditor section="summary" />
+                  <GuidedProfileEditor section="experience" />
+                </div>
+              </TabsContent>
+            </Tabs>
           </div>
         )}
       </div>
