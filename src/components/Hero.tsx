@@ -3,6 +3,13 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 
 const Hero: React.FC = () => {
+  const scrollToSection = (id: string) => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <section className="pt-32 pb-24 overflow-hidden">
       <div className="container-custom">
@@ -21,10 +28,19 @@ const Hero: React.FC = () => {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
-              <Button size="lg" className="h-12">
+              <Button 
+                size="lg" 
+                className="h-12"
+                onClick={() => scrollToSection('profile-analyzer')}
+              >
                 Analyze My Profile
               </Button>
-              <Button variant="outline" size="lg" className="h-12">
+              <Button 
+                variant="outline" 
+                size="lg" 
+                className="h-12"
+                onClick={() => scrollToSection('features')}
+              >
                 Learn More
               </Button>
             </div>
