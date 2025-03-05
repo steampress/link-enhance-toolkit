@@ -20,7 +20,7 @@ const ProfileScore: React.FC<ProfileScoreProps> = ({
     if (score >= 80) return 'text-green-500';
     if (score >= 70) return 'text-blue-500';
     if (score >= 60) return 'text-amber-500';
-    if (score >= 50) return 'text-orange-500';
+    if (score >= 40) return 'text-orange-500';
     return 'text-red-500';
   };
 
@@ -29,16 +29,16 @@ const ProfileScore: React.FC<ProfileScoreProps> = ({
     if (score >= 80) return 'Outstanding';
     if (score >= 70) return 'Excellent';
     if (score >= 60) return 'Good';
-    if (score >= 50) return 'Fair';
-    return 'Needs Attention';
+    if (score >= 40) return 'Needs Work';
+    return 'Significant Improvement Needed';
   };
   
   const getScoreDescription = (score: number) => {
     if (score >= 90) return 'Your profile matches the quality of LinkedIn Top Voices for 2024';
-    if (score >= 80) return 'Your profile is very well-optimized with strong personal branding';
+    if (score >= 80) return 'Your profile is well-optimized with strong personal branding';
     if (score >= 70) return 'Your profile stands out with good optimization for recruiters';
     if (score >= 60) return 'Your profile is above average but has room for improvement';
-    if (score >= 50) return 'Your profile needs several key improvements to stand out';
+    if (score >= 40) return 'Your profile needs several key improvements to stand out';
     return 'Your profile requires significant enhancement to be effective';
   };
 

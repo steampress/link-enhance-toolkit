@@ -60,8 +60,8 @@ export interface ProfileSection {
 }
 
 export const getProfileStatus = (score: number): 'optimized' | 'needs-work' | 'incomplete' => {
-  if (score >= 75) return 'optimized';
-  if (score >= 50) return 'needs-work';
+  if (score >= 70) return 'optimized';
+  if (score >= 40) return 'needs-work';
   return 'incomplete';
 };
 
@@ -206,9 +206,9 @@ export const getRecommendations = (sectionId: string, score: number): string[] =
 
   // Get the right set of recommendations based on score
   let tier = 0; // High score by default
-  if (score < 80 && score >= 50) {
+  if (score < 70 && score >= 40) {
     tier = 1; // Medium score
-  } else if (score < 50) {
+  } else if (score < 40) {
     tier = 2; // Low score
   }
 
@@ -223,58 +223,58 @@ export const analyzeProfile = (profileContent: string): ProfileSection[] => {
   // Scoring indicators - what we look for in top 2024 LinkedIn voices profiles
   const indicators = {
     photo: [
-      { term: 'professional photo', weight: 0.3, baseScore: 55 },
-      { term: 'headshot', weight: 0.3, baseScore: 55 },
-      { term: 'background image', weight: 0.2, baseScore: 55 },
-      { term: 'brand', weight: 0.2, baseScore: 55 }
+      { term: 'professional photo', weight: 0.3, baseScore: 30 },
+      { term: 'headshot', weight: 0.3, baseScore: 30 },
+      { term: 'background image', weight: 0.2, baseScore: 30 },
+      { term: 'brand', weight: 0.2, baseScore: 30 }
     ],
     headline: [
-      { term: 'value proposition', weight: 0.2, baseScore: 55 },
-      { term: 'keyword', weight: 0.2, baseScore: 55 },
-      { term: 'industry', weight: 0.15, baseScore: 55 },
-      { term: 'specific', weight: 0.15, baseScore: 55 },
-      { term: 'accomplishment', weight: 0.15, baseScore: 55 },
-      { term: 'thought leader', weight: 0.15, baseScore: 55 }
+      { term: 'value proposition', weight: 0.2, baseScore: 30 },
+      { term: 'keyword', weight: 0.2, baseScore: 30 },
+      { term: 'industry', weight: 0.15, baseScore: 30 },
+      { term: 'specific', weight: 0.15, baseScore: 30 },
+      { term: 'accomplishment', weight: 0.15, baseScore: 30 },
+      { term: 'thought leader', weight: 0.15, baseScore: 30 }
     ],
     experience: [
-      { term: 'year', weight: 0.1, baseScore: 55 },
-      { term: 'led', weight: 0.1, baseScore: 55 },
-      { term: 'managed', weight: 0.1, baseScore: 55 },
-      { term: 'achieved', weight: 0.15, baseScore: 55 },
-      { term: 'increased', weight: 0.15, baseScore: 55 },
-      { term: 'created', weight: 0.1, baseScore: 55 },
-      { term: 'developed', weight: 0.1, baseScore: 55 },
-      { term: 'result', weight: 0.1, baseScore: 55 },
-      { term: 'impact', weight: 0.1, baseScore: 55 }
+      { term: 'year', weight: 0.1, baseScore: 30 },
+      { term: 'led', weight: 0.1, baseScore: 30 },
+      { term: 'managed', weight: 0.1, baseScore: 30 },
+      { term: 'achieved', weight: 0.15, baseScore: 30 },
+      { term: 'increased', weight: 0.15, baseScore: 30 },
+      { term: 'created', weight: 0.1, baseScore: 30 },
+      { term: 'developed', weight: 0.1, baseScore: 30 },
+      { term: 'result', weight: 0.1, baseScore: 30 },
+      { term: 'impact', weight: 0.1, baseScore: 30 }
     ],
     skills: [
-      { term: 'skill', weight: 0.25, baseScore: 55 },
-      { term: 'certification', weight: 0.2, baseScore: 55 },
-      { term: 'endorsement', weight: 0.25, baseScore: 55 },
-      { term: 'expertise', weight: 0.15, baseScore: 55 },
-      { term: 'proficient', weight: 0.15, baseScore: 55 }
+      { term: 'skill', weight: 0.25, baseScore: 30 },
+      { term: 'certification', weight: 0.2, baseScore: 30 },
+      { term: 'endorsement', weight: 0.25, baseScore: 30 },
+      { term: 'expertise', weight: 0.15, baseScore: 30 },
+      { term: 'proficient', weight: 0.15, baseScore: 30 }
     ],
     activity: [
-      { term: 'post', weight: 0.2, baseScore: 55 },
-      { term: 'article', weight: 0.15, baseScore: 55 },
-      { term: 'comment', weight: 0.15, baseScore: 55 },
-      { term: 'share', weight: 0.1, baseScore: 55 },
-      { term: 'engage', weight: 0.1, baseScore: 55 },
-      { term: 'content', weight: 0.15, baseScore: 55 },
-      { term: 'newsletter', weight: 0.15, baseScore: 55 }
+      { term: 'post', weight: 0.2, baseScore: 30 },
+      { term: 'article', weight: 0.15, baseScore: 30 },
+      { term: 'comment', weight: 0.15, baseScore: 30 },
+      { term: 'share', weight: 0.1, baseScore: 30 },
+      { term: 'engage', weight: 0.1, baseScore: 30 },
+      { term: 'content', weight: 0.15, baseScore: 30 },
+      { term: 'newsletter', weight: 0.15, baseScore: 30 }
     ],
     recommendations: [
-      { term: 'recommendation', weight: 0.4, baseScore: 55 },
-      { term: 'recommend', weight: 0.2, baseScore: 55 },
-      { term: 'endorse', weight: 0.2, baseScore: 55 },
-      { term: 'colleague', weight: 0.1, baseScore: 55 },
-      { term: 'testimonial', weight: 0.1, baseScore: 55 }
+      { term: 'recommendation', weight: 0.4, baseScore: 30 },
+      { term: 'recommend', weight: 0.2, baseScore: 30 },
+      { term: 'endorse', weight: 0.2, baseScore: 30 },
+      { term: 'colleague', weight: 0.1, baseScore: 30 },
+      { term: 'testimonial', weight: 0.1, baseScore: 30 }
     ]
   };
   
   // If content is extremely short or empty, use randomized scores with a lower average
   if (!profileContent || profileContent.length < 50) {
-    return generateRandomScores(30, 60); // Low to medium scores for empty/short profiles
+    return generateRandomScores(20, 40); // Low scores for empty/short profiles
   }
   
   // For normal profiles, run the indicators-based analysis
@@ -292,33 +292,33 @@ export const analyzeProfile = (profileContent: string): ProfileSection[] => {
     terms.forEach(({ term, weight, baseScore }) => {
       maxPossibleScore += weight * 100;
       
-      // Start with a base score instead of 0 to be more generous
+      // Start with a lower base score to be less generous
       rawScore += baseScore * weight;
       
       // Check if term exists in content
       if (content.includes(term)) {
         // Add weighted score
         const occurrences = countOccurrences(content, term);
-        // More generous scoring - each occurrence adds more to the score
-        const termScore = Math.min(occurrences * 45, 100) * weight;
+        // Less generous scoring - each occurrence adds less to the score
+        const termScore = Math.min(occurrences * 25, 80) * weight;
         rawScore += termScore;
       }
     });
     
-    // Calibrated normalization for 2024 top voices profiles
-    // Higher floor value ensures even basic profiles get fair scores
-    const normalizedScore = Math.min(100, Math.max(45, (rawScore / maxPossibleScore) * 150));
+    // More stringent normalization
+    // Lower floor value for more honest scoring
+    const normalizedScore = Math.min(95, Math.max(15, (rawScore / maxPossibleScore) * 125));
     
-    // Add slight randomness for more realistic variation but maintain the calculated score as primary factor
-    const finalScore = Math.round(normalizedScore * 0.9 + Math.random() * 10);
-    const clampedScore = Math.min(100, Math.max(40, finalScore));
+    // Add slight randomness for more realistic variation
+    const finalScore = Math.round(normalizedScore * 0.9 + Math.random() * 8);
+    const clampedScore = Math.min(95, Math.max(15, finalScore));
     
     const status = getProfileStatus(clampedScore);
     
     // Generate description based on score
     const descriptions = {
       photo: [
-        'Your profile photo and background align with 2024 top voices standards.',  // High
+        'Your profile photo and background align with top LinkedIn voices standards.',  // High
         'Your profile photo is acceptable but could be enhanced for better brand alignment.',      // Medium
         'Your profile photo and background need significant improvement to meet professional standards.'  // Low
       ],
@@ -350,9 +350,9 @@ export const analyzeProfile = (profileContent: string): ProfileSection[] => {
     };
     
     let descriptionIndex = 0;
-    if (clampedScore < 75 && clampedScore >= 50) {
+    if (clampedScore < 70 && clampedScore >= 40) {
       descriptionIndex = 1;
-    } else if (clampedScore < 50) {
+    } else if (clampedScore < 40) {
       descriptionIndex = 2;
     }
     
@@ -386,7 +386,7 @@ function generateRandomScores(min: number, max: number): ProfileSection[] {
       title: section.title,
       score,
       status,
-      description: `This score is based on analysis of your ${section.title.toLowerCase()} compared to 2024 LinkedIn Top Voices.`,
+      description: `This score is based on analysis of your ${section.title.toLowerCase()} compared to LinkedIn Top Voices.`,
       recommendations: getRecommendations(section.id, score)
     };
   });
@@ -399,20 +399,20 @@ export const generateMockProfileAnalysis = (profileContent?: string): ProfileSec
     return analyzeProfile(profileContent);
   }
   
-  // For demo purposes with no content, generate more optimistic demo profiles
+  // For demo purposes with no content, generate more realistic demo profiles
   const profileQuality = Math.random();
   
   if (profileQuality > 0.85) {
     // Top-tier profile (LinkedIn Top Voice 2024 quality)
-    return generateRandomScores(85, 95);
+    return generateRandomScores(75, 90);
   } else if (profileQuality > 0.6) {
     // Above average profile
-    return generateRandomScores(70, 85);
+    return generateRandomScores(60, 75);
   } else if (profileQuality > 0.35) {
     // Average profile
-    return generateRandomScores(55, 70);
+    return generateRandomScores(40, 60);
   } else {
     // Below average profile
-    return generateRandomScores(40, 55);
+    return generateRandomScores(20, 40);
   }
 };
