@@ -216,7 +216,6 @@ export const getRecommendations = (sectionId: string, score: number): string[] =
 };
 
 // Analyze a profile based on provided content
-// This function will now actually analyze the profile content
 export const analyzeProfile = (profileContent: string): ProfileSection[] => {
   // Convert to lowercase for case-insensitive matching
   const content = profileContent.toLowerCase();
@@ -224,43 +223,43 @@ export const analyzeProfile = (profileContent: string): ProfileSection[] => {
   // Scoring indicators - what we look for in top profiles
   const indicators = {
     photo: [
-      { term: 'professional photo', weight: 0.4 },
-      { term: 'headshot', weight: 0.3 },
-      { term: 'background image', weight: 0.3 }
+      { term: 'professional photo', weight: 0.4, baseScore: 50 },
+      { term: 'headshot', weight: 0.3, baseScore: 50 },
+      { term: 'background image', weight: 0.3, baseScore: 50 }
     ],
     headline: [
-      { term: 'unique value proposition', weight: 0.25 },
-      { term: 'keywords', weight: 0.25 },
-      { term: 'industry', weight: 0.15 },
-      { term: 'specific role', weight: 0.15 },
-      { term: 'accomplishment', weight: 0.2 }
+      { term: 'unique value proposition', weight: 0.25, baseScore: 50 },
+      { term: 'keywords', weight: 0.25, baseScore: 50 },
+      { term: 'industry', weight: 0.15, baseScore: 50 },
+      { term: 'specific role', weight: 0.15, baseScore: 50 },
+      { term: 'accomplishment', weight: 0.2, baseScore: 50 }
     ],
     experience: [
-      { term: 'year', weight: 0.1 },
-      { term: 'led', weight: 0.15 },
-      { term: 'managed', weight: 0.15 },
-      { term: 'achieved', weight: 0.2 },
-      { term: 'increased', weight: 0.2 },
-      { term: 'created', weight: 0.1 },
-      { term: 'developed', weight: 0.1 }
+      { term: 'year', weight: 0.1, baseScore: 50 },
+      { term: 'led', weight: 0.15, baseScore: 50 },
+      { term: 'managed', weight: 0.15, baseScore: 50 },
+      { term: 'achieved', weight: 0.2, baseScore: 50 },
+      { term: 'increased', weight: 0.2, baseScore: 50 },
+      { term: 'created', weight: 0.1, baseScore: 50 },
+      { term: 'developed', weight: 0.1, baseScore: 50 }
     ],
     skills: [
-      { term: 'skill', weight: 0.3 },
-      { term: 'certification', weight: 0.2 },
-      { term: 'endorsement', weight: 0.3 },
-      { term: 'expertise', weight: 0.2 }
+      { term: 'skill', weight: 0.3, baseScore: 50 },
+      { term: 'certification', weight: 0.2, baseScore: 50 },
+      { term: 'endorsement', weight: 0.3, baseScore: 50 },
+      { term: 'expertise', weight: 0.2, baseScore: 50 }
     ],
     activity: [
-      { term: 'post', weight: 0.3 },
-      { term: 'article', weight: 0.2 },
-      { term: 'comment', weight: 0.2 },
-      { term: 'share', weight: 0.15 },
-      { term: 'engage', weight: 0.15 }
+      { term: 'post', weight: 0.3, baseScore: 50 },
+      { term: 'article', weight: 0.2, baseScore: 50 },
+      { term: 'comment', weight: 0.2, baseScore: 50 },
+      { term: 'share', weight: 0.15, baseScore: 50 },
+      { term: 'engage', weight: 0.15, baseScore: 50 }
     ],
     recommendations: [
-      { term: 'recommendation', weight: 0.6 },
-      { term: 'recommend', weight: 0.2 },
-      { term: 'endorse', weight: 0.2 }
+      { term: 'recommendation', weight: 0.6, baseScore: 50 },
+      { term: 'recommend', weight: 0.2, baseScore: 50 },
+      { term: 'endorse', weight: 0.2, baseScore: 50 }
     ]
   };
   
@@ -281,24 +280,28 @@ export const analyzeProfile = (profileContent: string): ProfileSection[] => {
     let rawScore = 0;
     let maxPossibleScore = 0;
     
-    terms.forEach(({ term, weight }) => {
+    terms.forEach(({ term, weight, baseScore }) => {
       maxPossibleScore += weight * 100;
+      
+      // Start with a base score instead of 0 to be more generous
+      rawScore += baseScore * weight;
       
       // Check if term exists in content
       if (content.includes(term)) {
         // Add weighted score
         const occurrences = countOccurrences(content, term);
-        const termScore = Math.min(occurrences * 25, 100) * weight; // Cap at 100
+        // More generous scoring - each occurrence adds more to the score
+        const termScore = Math.min(occurrences * 35, 100) * weight;
         rawScore += termScore;
       }
     });
     
-    // Normalize to 0-100 scale
-    const normalizedScore = Math.min(100, (rawScore / maxPossibleScore) * 100);
+    // Normalize to 0-100 scale with a minimum floor
+    const normalizedScore = Math.min(100, Math.max(40, (rawScore / maxPossibleScore) * 150));
     
-    // Add randomness for more realistic variation but respect the calculated score
-    const finalScore = Math.round(normalizedScore * 0.7 + Math.random() * 30);
-    const clampedScore = Math.min(100, Math.max(0, finalScore));
+    // Add slight randomness for more realistic variation but maintain the calculated score as primary factor
+    const finalScore = Math.round(normalizedScore * 0.9 + Math.random() * 10);
+    const clampedScore = Math.min(100, Math.max(30, finalScore));
     
     const status = getProfileStatus(clampedScore);
     
@@ -386,20 +389,20 @@ export const generateMockProfileAnalysis = (profileContent?: string): ProfileSec
     return analyzeProfile(profileContent);
   }
   
-  // For demo purposes with no content, generate varying quality profiles
+  // For demo purposes with no content, generate more optimistic demo profiles
   const profileQuality = Math.random();
   
   if (profileQuality > 0.8) {
     // Top-tier profile (LinkedIn Top Voice quality)
-    return generateRandomScores(75, 95);
+    return generateRandomScores(80, 95);
   } else if (profileQuality > 0.5) {
     // Above average profile
-    return generateRandomScores(60, 85);
+    return generateRandomScores(65, 85);
   } else if (profileQuality > 0.3) {
     // Average profile
-    return generateRandomScores(40, 70);
+    return generateRandomScores(50, 75);
   } else {
     // Below average profile
-    return generateRandomScores(20, 55);
+    return generateRandomScores(35, 65);
   }
 };

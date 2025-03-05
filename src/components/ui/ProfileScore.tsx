@@ -34,12 +34,12 @@ const ProfileScore: React.FC<ProfileScoreProps> = ({
   };
   
   const getScoreDescription = (score: number) => {
-    if (score >= 85) return 'Your profile is top-tier';
-    if (score >= 70) return 'Your profile is well-optimized';
-    if (score >= 60) return 'Your profile is above average';
-    if (score >= 50) return 'Your profile needs improvement';
-    if (score >= 35) return 'Your profile needs significant work';
-    return 'Your profile needs immediate attention';
+    if (score >= 85) return 'Your profile is top-tier, comparable to LinkedIn Top Voices';
+    if (score >= 70) return 'Your profile is well-optimized and stands out';
+    if (score >= 60) return 'Your profile is above average and attractive to recruiters';
+    if (score >= 50) return 'Your profile needs some improvements to stand out';
+    if (score >= 35) return 'Your profile needs significant work to be competitive';
+    return 'Your profile requires immediate attention to be effective';
   };
 
   const sizesMap = {
