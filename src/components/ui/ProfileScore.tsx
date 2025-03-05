@@ -28,6 +28,13 @@ const ProfileScore: React.FC<ProfileScoreProps> = ({
     if (score >= 40) return 'Fair';
     return 'Needs Work';
   };
+  
+  const getScoreDescription = (score: number) => {
+    if (score >= 80) return 'Your profile is well-optimized';
+    if (score >= 60) return 'Your profile is above average';
+    if (score >= 40) return 'Your profile needs improvement';
+    return 'Your profile needs significant work';
+  };
 
   const sizesMap = {
     sm: {
@@ -50,6 +57,7 @@ const ProfileScore: React.FC<ProfileScoreProps> = ({
   const { container, text, thickness } = sizesMap[size];
   const scoreColor = getScoreColor(score);
   const scoreText = getScoreText(score);
+  const scoreDescription = getScoreDescription(score);
   const rotation = (score / 100) * 360;
 
   return (
@@ -75,7 +83,7 @@ const ProfileScore: React.FC<ProfileScoreProps> = ({
       {showLabel && (
         <div className="mt-2 text-center">
           <p className={cn("font-medium", scoreColor)}>{scoreText}</p>
-          <p className="text-sm text-muted-foreground">Profile Score</p>
+          <p className="text-sm text-muted-foreground">{scoreDescription}</p>
         </div>
       )}
     </div>

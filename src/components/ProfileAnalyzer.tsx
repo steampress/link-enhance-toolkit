@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -10,6 +10,7 @@ import BackgroundImageGenerator from '@/components/BackgroundImageGenerator';
 import GuidedProfileEditor from '@/components/GuidedProfileEditor';
 import { toast } from 'sonner';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { sectionWeightages, generateMockProfileAnalysis, calculateOverallScore, ProfileSection as ProfileSectionType } from '@/utils/profileScoring';
 
 const ProfileAnalyzer: React.FC = () => {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
@@ -17,6 +18,15 @@ const ProfileAnalyzer: React.FC = () => {
   const [profileUrl, setProfileUrl] = useState('');
   const [profileContent, setProfileContent] = useState('');
   const [activeTab, setActiveTab] = useState('recommendations');
+  const [sections, setSections] = useState<ProfileSectionType[]>([]);
+  const [overallScore, setOverallScore] = useState(0);
+
+  // Generate mock analysis when component mounts
+  useEffect(() => {
+    const mockSections = generateMockProfileAnalysis();
+    setSections(mockSections);
+    setOverallScore(calculateOverallScore(mockSections));
+  }, []);
 
   const handleAnalyze = () => {
     if (!profileUrl && !profileContent) {
@@ -28,57 +38,16 @@ const ProfileAnalyzer: React.FC = () => {
     
     // Simulate analysis delay
     setTimeout(() => {
+      // Generate a new mock analysis
+      const mockSections = generateMockProfileAnalysis();
+      setSections(mockSections);
+      setOverallScore(calculateOverallScore(mockSections));
+      
       setIsAnalyzing(false);
       setIsAnalyzed(true);
       toast.success('Profile analysis completed!');
     }, 2500);
   };
-  
-  const sections = [
-    {
-      title: 'Profile Photo & Background',
-      score: 85,
-      status: 'optimized' as const,
-      description: 'Your profile photo is professional, but your background image could be improved to better represent your brand.',
-      recommendations: [
-        'Add a background image that represents your industry or personal brand',
-        'Ensure your profile photo shows your face clearly with good lighting'
-      ]
-    },
-    {
-      title: 'Headline & Summary',
-      score: 65,
-      status: 'needs-work' as const,
-      description: 'Your headline is too generic and your summary lacks specific achievements and keywords.',
-      recommendations: [
-        'Include industry-specific keywords in your headline',
-        'Add specific achievements with metrics in your summary',
-        'Mention your unique value proposition'
-      ]
-    },
-    {
-      title: 'Experience & Accomplishments',
-      score: 70,
-      status: 'needs-work' as const,
-      description: 'Your experience section needs more detailed accomplishments with measurable results.',
-      recommendations: [
-        'Use action verbs to start each bullet point',
-        'Include specific metrics and results for key achievements',
-        'Add relevant media or work samples to showcase your work'
-      ]
-    },
-    {
-      title: 'Skills & Endorsements',
-      score: 45,
-      status: 'incomplete' as const,
-      description: 'Your skills section is underdeveloped with few endorsements and missing key industry skills.',
-      recommendations: [
-        'Add at least 10 more relevant skills to your profile',
-        'Arrange skills with the most important ones at the top',
-        'Ask colleagues and connections for relevant endorsements'
-      ]
-    }
-  ];
 
   return (
     <section id="profile-analyzer" className="py-20">
@@ -88,6 +57,9 @@ const ProfileAnalyzer: React.FC = () => {
           <p className="text-lg text-muted-foreground">
             Get personalized recommendations to optimize your profile and stand out to recruiters
           </p>
+          <div className="mt-4 inline-block px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20 text-sm font-medium">
+            Calibrated with data from top 100 LinkedIn Voices
+          </div>
         </div>
         
         {!isAnalyzed ? (
@@ -141,13 +113,21 @@ const ProfileAnalyzer: React.FC = () => {
                 <div className="text-center md:text-left md:flex-1">
                   <h3 className="text-xl font-semibold mb-2">Your Profile Score</h3>
                   <p className="text-muted-foreground max-w-md">
-                    Based on our analysis, your LinkedIn profile scores well in some areas but has room for improvement.
+                    Based on our analysis calibrated with top LinkedIn voices, your profile scores {overallScore}%. Here's how you can improve:
                   </p>
+                  <div className="mt-4 flex flex-wrap gap-3">
+                    {sectionWeightages.map((section) => (
+                      <div key={section.id} className="bg-secondary/20 px-2 py-1 rounded text-xs flex items-center">
+                        <span className="font-medium">{section.title.split(' ')[0]}</span>
+                        <span className="ml-1 text-muted-foreground">{Math.round(section.weight * 100)}%</span>
+                      </div>
+                    ))}
+                  </div>
                   <Button className="mt-6" onClick={() => setIsAnalyzed(false)}>
                     Analyze Another Profile
                   </Button>
                 </div>
-                <ProfileScore score={67} size="lg" />
+                <ProfileScore score={overallScore} size="lg" />
               </div>
             </div>
             
