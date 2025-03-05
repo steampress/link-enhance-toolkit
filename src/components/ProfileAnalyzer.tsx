@@ -21,11 +21,11 @@ const ProfileAnalyzer: React.FC = () => {
   const [sections, setSections] = useState<ProfileSectionType[]>([]);
   const [overallScore, setOverallScore] = useState(0);
 
-  // Generate mock analysis when component mounts
+  // Generate demo analysis when component mounts
   useEffect(() => {
-    const mockSections = generateMockProfileAnalysis();
-    setSections(mockSections);
-    setOverallScore(calculateOverallScore(mockSections));
+    const demoSections = generateMockProfileAnalysis();
+    setSections(demoSections);
+    setOverallScore(calculateOverallScore(demoSections));
   }, []);
 
   const handleAnalyze = () => {
@@ -38,10 +38,14 @@ const ProfileAnalyzer: React.FC = () => {
     
     // Simulate analysis delay
     setTimeout(() => {
-      // Generate a new mock analysis
-      const mockSections = generateMockProfileAnalysis();
-      setSections(mockSections);
-      setOverallScore(calculateOverallScore(mockSections));
+      // Generate analysis based on the provided content
+      // This is where the actual profile analysis would happen
+      const analysisInput = profileContent || 
+                           `LinkedIn URL: ${profileUrl} - We would fetch content from this URL in a real implementation`;
+      
+      const analyzedSections = generateMockProfileAnalysis(analysisInput);
+      setSections(analyzedSections);
+      setOverallScore(calculateOverallScore(analyzedSections));
       
       setIsAnalyzing(false);
       setIsAnalyzed(true);

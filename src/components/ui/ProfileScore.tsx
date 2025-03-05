@@ -16,24 +16,30 @@ const ProfileScore: React.FC<ProfileScoreProps> = ({
   className 
 }) => {
   const getScoreColor = (score: number) => {
-    if (score >= 80) return 'text-green-500';
+    if (score >= 85) return 'text-green-600';
+    if (score >= 70) return 'text-green-500';
     if (score >= 60) return 'text-blue-500';
-    if (score >= 40) return 'text-amber-500';
+    if (score >= 50) return 'text-amber-500';
+    if (score >= 35) return 'text-orange-500';
     return 'text-red-500';
   };
 
   const getScoreText = (score: number) => {
-    if (score >= 80) return 'Excellent';
+    if (score >= 85) return 'Outstanding';
+    if (score >= 70) return 'Excellent';
     if (score >= 60) return 'Good';
-    if (score >= 40) return 'Fair';
-    return 'Needs Work';
+    if (score >= 50) return 'Fair';
+    if (score >= 35) return 'Needs Work';
+    return 'Needs Attention';
   };
   
   const getScoreDescription = (score: number) => {
-    if (score >= 80) return 'Your profile is well-optimized';
+    if (score >= 85) return 'Your profile is top-tier';
+    if (score >= 70) return 'Your profile is well-optimized';
     if (score >= 60) return 'Your profile is above average';
-    if (score >= 40) return 'Your profile needs improvement';
-    return 'Your profile needs significant work';
+    if (score >= 50) return 'Your profile needs improvement';
+    if (score >= 35) return 'Your profile needs significant work';
+    return 'Your profile needs immediate attention';
   };
 
   const sizesMap = {
