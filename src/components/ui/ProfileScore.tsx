@@ -16,30 +16,30 @@ const ProfileScore: React.FC<ProfileScoreProps> = ({
   className 
 }) => {
   const getScoreColor = (score: number) => {
-    if (score >= 85) return 'text-green-600';
-    if (score >= 70) return 'text-green-500';
-    if (score >= 60) return 'text-blue-500';
-    if (score >= 50) return 'text-amber-500';
-    if (score >= 35) return 'text-orange-500';
+    if (score >= 90) return 'text-green-600';
+    if (score >= 80) return 'text-green-500';
+    if (score >= 70) return 'text-blue-500';
+    if (score >= 60) return 'text-amber-500';
+    if (score >= 50) return 'text-orange-500';
     return 'text-red-500';
   };
 
   const getScoreText = (score: number) => {
-    if (score >= 85) return 'Outstanding';
+    if (score >= 90) return 'Top 1%';
+    if (score >= 80) return 'Outstanding';
     if (score >= 70) return 'Excellent';
     if (score >= 60) return 'Good';
     if (score >= 50) return 'Fair';
-    if (score >= 35) return 'Needs Work';
     return 'Needs Attention';
   };
   
   const getScoreDescription = (score: number) => {
-    if (score >= 85) return 'Your profile is top-tier, comparable to LinkedIn Top Voices';
-    if (score >= 70) return 'Your profile is well-optimized and stands out';
-    if (score >= 60) return 'Your profile is above average and attractive to recruiters';
-    if (score >= 50) return 'Your profile needs some improvements to stand out';
-    if (score >= 35) return 'Your profile needs significant work to be competitive';
-    return 'Your profile requires immediate attention to be effective';
+    if (score >= 90) return 'Your profile matches the quality of LinkedIn Top Voices for 2024';
+    if (score >= 80) return 'Your profile is very well-optimized with strong personal branding';
+    if (score >= 70) return 'Your profile stands out with good optimization for recruiters';
+    if (score >= 60) return 'Your profile is above average but has room for improvement';
+    if (score >= 50) return 'Your profile needs several key improvements to stand out';
+    return 'Your profile requires significant enhancement to be effective';
   };
 
   const sizesMap = {
