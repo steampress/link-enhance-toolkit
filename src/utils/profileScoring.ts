@@ -11,12 +11,12 @@ export interface SectionWeight {
 }
 
 // Recalibrated weightages based on analysis of top LinkedIn voices for 2024
-// Significantly increased activity weight, reduced photo and skills weights
+// Removed recommendations and significantly increased activity weight
 export const sectionWeightages: SectionWeight[] = [
   {
     id: 'photo',
     title: 'Profile Photo & Background',
-    weight: 0.07, // Decreased from 0.12
+    weight: 0.07, // Maintained
     description: 'Professional photo and relevant background image'
   },
   {
@@ -34,20 +34,14 @@ export const sectionWeightages: SectionWeight[] = [
   {
     id: 'skills',
     title: 'Skills & Endorsements',
-    weight: 0.08, // Decreased from 0.13
+    weight: 0.08, // Maintained
     description: 'Relevant skills with strong endorsements'
   },
   {
     id: 'activity',
     title: 'Content & Activity',
-    weight: 0.28, // Significantly increased from 0.18
+    weight: 0.38, // Significantly increased from 0.28 (added the 0.10 from recommendations)
     description: 'Regular posting and engagement'
-  },
-  {
-    id: 'recommendations',
-    title: 'Recommendations',
-    weight: 0.10, // Maintained
-    description: 'Quality recommendations from colleagues'
   }
 ];
 
@@ -268,13 +262,6 @@ export const analyzeProfile = (profileContent: string): ProfileSection[] => {
       { term: 'video', weight: 0.1, baseScore: 30 }, // Added for content diversity
       { term: 'regular', weight: 0.15, baseScore: 30 }, // Added for consistency
       { term: 'trending', weight: 0.1, baseScore: 30 } // Added for relevance
-    ],
-    recommendations: [
-      { term: 'recommendation', weight: 0.4, baseScore: 30 },
-      { term: 'recommend', weight: 0.2, baseScore: 30 },
-      { term: 'endorse', weight: 0.2, baseScore: 30 },
-      { term: 'colleague', weight: 0.1, baseScore: 30 },
-      { term: 'testimonial', weight: 0.1, baseScore: 30 }
     ]
   };
   

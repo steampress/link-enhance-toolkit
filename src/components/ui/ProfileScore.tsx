@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { cn } from '@/lib/utils';
 
@@ -34,11 +35,11 @@ const ProfileScore: React.FC<ProfileScoreProps> = ({
   
   const getScoreDescription = (score: number) => {
     if (score >= 90) return 'Your profile matches the quality of LinkedIn Top Voices for 2024';
-    if (score >= 80) return 'Your profile shows strong posting activity and engagement';
-    if (score >= 70) return 'Your profile demonstrates good content creation and networking';
-    if (score >= 60) return 'Your profile has decent activity but could increase engagement';
-    if (score >= 40) return 'Your profile needs more regular posting and engagement';
-    return 'Your profile shows minimal activity and needs a consistent posting strategy';
+    if (score >= 80) return 'Your profile shows exceptional posting frequency and engagement';
+    if (score >= 70) return 'Your profile demonstrates strong content creation and networking';
+    if (score >= 60) return 'Your profile has regular activity but needs more engagement';
+    if (score >= 40) return 'Your profile needs more consistent posting and engagement';
+    return 'Your profile shows minimal activity and requires a content strategy';
   };
 
   const sizesMap = {

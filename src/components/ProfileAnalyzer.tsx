@@ -17,7 +17,7 @@ const ProfileAnalyzer: React.FC = () => {
   const [isAnalyzed, setIsAnalyzed] = useState(false);
   const [profileUrl, setProfileUrl] = useState('');
   const [profileContent, setProfileContent] = useState('');
-  const [activeTab, setActiveTab] = useState('recommendations');
+  const [activeTab, setActiveTab] = useState('sections');
   const [sections, setSections] = useState<ProfileSectionType[]>([]);
   const [overallScore, setOverallScore] = useState(0);
 
@@ -135,15 +135,15 @@ const ProfileAnalyzer: React.FC = () => {
               </div>
             </div>
             
-            <Tabs defaultValue="recommendations" className="mb-8" value={activeTab} onValueChange={setActiveTab}>
-              <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 mb-6">
-                <TabsTrigger value="recommendations">Recommendations</TabsTrigger>
+            <Tabs defaultValue="sections" className="mb-8" value={activeTab} onValueChange={setActiveTab}>
+              <TabsList className="grid w-full grid-cols-1 md:grid-cols-4 mb-6">
+                <TabsTrigger value="sections">Profile Sections</TabsTrigger>
                 <TabsTrigger value="profile-photo">Profile Photo</TabsTrigger>
                 <TabsTrigger value="background">Background</TabsTrigger>
                 <TabsTrigger value="content">Content Editor</TabsTrigger>
               </TabsList>
               
-              <TabsContent value="recommendations">
+              <TabsContent value="sections">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {sections.map((section, index) => (
                     <ProfileSection
