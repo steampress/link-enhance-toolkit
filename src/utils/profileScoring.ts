@@ -52,9 +52,10 @@ export interface ProfileSection {
   recommendations: string[];
 }
 
+// Improved thresholds for status categorization
 export const getProfileStatus = (score: number): 'optimized' | 'needs-work' | 'incomplete' => {
-  if (score >= 70) return 'optimized';
-  if (score >= 40) return 'needs-work';
+  if (score >= 65) return 'optimized'; // Lowered from 70
+  if (score >= 35) return 'needs-work'; // Lowered from 40
   return 'incomplete';
 };
 
@@ -68,8 +69,11 @@ export const calculateOverallScore = (sections: ProfileSection[]): number => {
   // Calculate the sum of all weighted scores
   const totalScore = weightedScores.reduce((sum, score) => sum + score, 0);
   
+  // Add a small baseline boost to all scores (5%)
+  const boostedScore = Math.min(100, totalScore + 5);
+  
   // Return rounded integer score
-  return Math.round(totalScore);
+  return Math.round(boostedScore);
 };
 
 // Sample recommendations based on section type
@@ -188,12 +192,12 @@ export const getRecommendations = (sectionId: string, score: number): string[] =
   return recommendations[sectionId]?.[tier] || recommendations['headline'][tier]; // Default to headline if section not found
 };
 
-// COMPLETELY REVAMPED ACTIVITY DETECTION
-// This function extracts and scores LinkedIn activity from profile content
+// REVISED BASELINE ACTIVITY DETECTION
+// This function extracts and scores LinkedIn activity from profile content with improved baseline
 const detectActivityLevel = (content: string): number => {
-  // If content is empty or too short, return minimum score
+  // If content is empty or too short, return a higher minimum score
   if (!content || content.length < 50) {
-    return 15; // Minimum score
+    return 35; // Increased from 15 to provide a more encouraging baseline
   }
 
   console.log("Analyzing content for activity patterns...");
@@ -201,12 +205,12 @@ const detectActivityLevel = (content: string): number => {
   // Convert to lowercase for consistent matching
   const text = content.toLowerCase();
   
-  // Initialize score components
-  let postingFrequencyScore = 0;
-  let contentCreationScore = 0;
-  let engagementScore = 0;
-  let networkingScore = 0;
-  let featuresUsageScore = 0;
+  // Initialize score components with higher baseline values
+  let postingFrequencyScore = 5; // Was 0
+  let contentCreationScore = 5; // Was 0
+  let engagementScore = 5; // Was 0
+  let networkingScore = 5; // Was 0
+  let featuresUsageScore = 5; // Was 0
   
   // 1. POSTING FREQUENCY INDICATORS
   const frequencyKeywords = [
@@ -242,8 +246,8 @@ const detectActivityLevel = (content: string): number => {
     }
   }
   
-  // Cap the posting frequency score
-  postingFrequencyScore = Math.min(25, postingFrequencyScore);
+  // Cap the posting frequency score with higher ceiling
+  postingFrequencyScore = Math.min(30, postingFrequencyScore); // Was 25
   
   // 2. CONTENT CREATION INDICATORS
   const contentTypes = [
@@ -274,8 +278,8 @@ const detectActivityLevel = (content: string): number => {
     }
   }
   
-  // Cap the content creation score
-  contentCreationScore = Math.min(25, contentCreationScore);
+  // Cap the content creation score with higher ceiling
+  contentCreationScore = Math.min(30, contentCreationScore); // Was 25
   
   // 3. ENGAGEMENT INDICATORS
   const engagementTypes = [
@@ -303,8 +307,8 @@ const detectActivityLevel = (content: string): number => {
     }
   }
   
-  // Cap the engagement score
-  engagementScore = Math.min(20, engagementScore);
+  // Cap the engagement score with higher ceiling
+  engagementScore = Math.min(25, engagementScore); // Was 20
   
   // 4. NETWORKING INDICATORS
   const networkingTypes = [
@@ -326,8 +330,8 @@ const detectActivityLevel = (content: string): number => {
     }
   }
   
-  // Cap the networking score
-  networkingScore = Math.min(15, networkingScore);
+  // Cap the networking score with higher ceiling
+  networkingScore = Math.min(20, networkingScore); // Was 15
   
   // 5. LINKEDIN FEATURES USAGE
   const featureTypes = [
@@ -355,8 +359,8 @@ const detectActivityLevel = (content: string): number => {
     }
   }
   
-  // Cap the features usage score
-  featuresUsageScore = Math.min(15, featuresUsageScore);
+  // Cap the features usage score with higher ceiling
+  featuresUsageScore = Math.min(20, featuresUsageScore); // Was 15
   
   // SIMPLE KEYWORD DETECTION
   // Even without structured sentences, detect activity through keywords
@@ -364,7 +368,8 @@ const detectActivityLevel = (content: string): number => {
     'post', 'posts', 'posting', 'article', 'content', 'share', 'engage',
     'comment', 'like', 'react', 'video', 'publish', 'weekly', 'daily',
     'follower', 'connection', 'network', 'hashtag', 'trending', 'viral',
-    'views', 'impressions', 'reach'
+    'views', 'impressions', 'reach', 'LinkedIn', 'social', 'professional',
+    'media', 'update', 'status', 'career', 'influencer', 'thought leader'
   ];
   
   let keywordCount = 0;
@@ -377,8 +382,8 @@ const detectActivityLevel = (content: string): number => {
     }
   });
   
-  // Get additional points from keywords (diminishing returns)
-  let keywordScore = Math.min(10, keywordCount * 0.5);
+  // Get additional points from keywords with improved baseline
+  let keywordScore = Math.min(15, keywordCount * 0.75); // Was 10, keywordCount * 0.5
   
   // Calculate weighted final score
   // Emphasize posting frequency and content creation
@@ -390,32 +395,32 @@ const detectActivityLevel = (content: string): number => {
     (featuresUsageScore * 0.05) +
     (keywordScore * 0.1);
   
-  // Normalize to 0-100 scale
-  // Base score ensures even profiles with minimal matches get some score
-  const baseScore = 15; 
-  let finalScore = baseScore + (combinedScore / 1.2);
+  // Normalize to 0-100 scale with higher base score
+  // Base score ensures even profiles with minimal matches get a decent score
+  const baseScore = 35; // Was 15
+  let finalScore = baseScore + (combinedScore / 1.1); // Was combinedScore / 1.2
   
   // Cap at 95 to leave room for truly exceptional profiles
   finalScore = Math.min(95, finalScore);
   
   console.log(`Activity detection scores:
-    Posting Frequency: ${postingFrequencyScore}/25
-    Content Creation: ${contentCreationScore}/25
-    Engagement: ${engagementScore}/20
-    Networking: ${networkingScore}/15
-    LinkedIn Features: ${featuresUsageScore}/15
-    Keywords: ${keywordScore}/10
+    Posting Frequency: ${postingFrequencyScore}/30
+    Content Creation: ${contentCreationScore}/30
+    Engagement: ${engagementScore}/25
+    Networking: ${networkingScore}/20
+    LinkedIn Features: ${featuresUsageScore}/20
+    Keywords: ${keywordScore}/15
     Combined Raw Score: ${combinedScore}
     Final Score: ${finalScore}`);
   
   return finalScore;
 };
 
-// Analyze a profile based on provided content
+// Analyze a profile based on provided content with improved baseline scores
 export const analyzeProfile = (profileContent: string): ProfileSection[] => {
-  // If content is extremely short or empty, use randomized scores with a lower average
+  // If content is extremely short or empty, use randomized scores with a higher baseline
   if (!profileContent || profileContent.length < 50) {
-    return generateRandomScores(20, 40); // Low scores for empty/short profiles
+    return generateRandomScores(35, 55); // Was 20, 40
   }
   
   // Convert to lowercase for case-insensitive matching
@@ -427,36 +432,36 @@ export const analyzeProfile = (profileContent: string): ProfileSection[] => {
   // Process standard sections (photo, headline, experience, skills)
   const indicators = {
     photo: [
-      { term: 'professional photo', weight: 0.3, baseScore: 30 },
-      { term: 'headshot', weight: 0.3, baseScore: 30 },
-      { term: 'background image', weight: 0.2, baseScore: 30 },
-      { term: 'brand', weight: 0.2, baseScore: 30 }
+      { term: 'professional photo', weight: 0.3, baseScore: 40 }, // Was 30
+      { term: 'headshot', weight: 0.3, baseScore: 40 }, // Was 30
+      { term: 'background image', weight: 0.2, baseScore: 40 }, // Was 30
+      { term: 'brand', weight: 0.2, baseScore: 40 } // Was 30
     ],
     headline: [
-      { term: 'value proposition', weight: 0.2, baseScore: 30 },
-      { term: 'keyword', weight: 0.2, baseScore: 30 },
-      { term: 'industry', weight: 0.15, baseScore: 30 },
-      { term: 'specific', weight: 0.15, baseScore: 30 },
-      { term: 'accomplishment', weight: 0.15, baseScore: 30 },
-      { term: 'thought leader', weight: 0.15, baseScore: 30 }
+      { term: 'value proposition', weight: 0.2, baseScore: 40 }, // Was 30
+      { term: 'keyword', weight: 0.2, baseScore: 40 }, // Was 30
+      { term: 'industry', weight: 0.15, baseScore: 40 }, // Was 30
+      { term: 'specific', weight: 0.15, baseScore: 40 }, // Was 30
+      { term: 'accomplishment', weight: 0.15, baseScore: 40 }, // Was 30
+      { term: 'thought leader', weight: 0.15, baseScore: 40 } // Was 30
     ],
     experience: [
-      { term: 'year', weight: 0.1, baseScore: 30 },
-      { term: 'led', weight: 0.1, baseScore: 30 },
-      { term: 'managed', weight: 0.1, baseScore: 30 },
-      { term: 'achieved', weight: 0.15, baseScore: 30 },
-      { term: 'increased', weight: 0.15, baseScore: 30 },
-      { term: 'created', weight: 0.1, baseScore: 30 },
-      { term: 'developed', weight: 0.1, baseScore: 30 },
-      { term: 'result', weight: 0.1, baseScore: 30 },
-      { term: 'impact', weight: 0.1, baseScore: 30 }
+      { term: 'year', weight: 0.1, baseScore: 40 }, // Was 30
+      { term: 'led', weight: 0.1, baseScore: 40 }, // Was 30
+      { term: 'managed', weight: 0.1, baseScore: 40 }, // Was 30
+      { term: 'achieved', weight: 0.15, baseScore: 40 }, // Was 30
+      { term: 'increased', weight: 0.15, baseScore: 40 }, // Was 30
+      { term: 'created', weight: 0.1, baseScore: 40 }, // Was 30
+      { term: 'developed', weight: 0.1, baseScore: 40 }, // Was 30
+      { term: 'result', weight: 0.1, baseScore: 40 }, // Was 30
+      { term: 'impact', weight: 0.1, baseScore: 40 } // Was 30
     ],
     skills: [
-      { term: 'skill', weight: 0.25, baseScore: 30 },
-      { term: 'certification', weight: 0.2, baseScore: 30 },
-      { term: 'endorsement', weight: 0.25, baseScore: 30 },
-      { term: 'expertise', weight: 0.15, baseScore: 30 },
-      { term: 'proficient', weight: 0.15, baseScore: 30 }
+      { term: 'skill', weight: 0.25, baseScore: 40 }, // Was 30
+      { term: 'certification', weight: 0.2, baseScore: 40 }, // Was 30
+      { term: 'endorsement', weight: 0.25, baseScore: 40 }, // Was 30
+      { term: 'expertise', weight: 0.15, baseScore: 40 }, // Was 30
+      { term: 'proficient', weight: 0.15, baseScore: 40 } // Was 30
     ]
   };
   
@@ -471,26 +476,26 @@ export const analyzeProfile = (profileContent: string): ProfileSection[] => {
     terms.forEach(({ term, weight, baseScore }) => {
       maxPossibleScore += weight * 100;
       
-      // Start with a lower base score to be less generous
+      // Start with a higher base score
       rawScore += baseScore * weight;
       
       // Check if term exists in content
       if (content.includes(term)) {
-        // Add weighted score
+        // Add weighted score with improved multiplier
         const occurrences = countOccurrences(content, term);
-        // Less generous scoring - each occurrence adds less to the score
-        const termScore = Math.min(occurrences * 25, 80) * weight;
+        // More generous scoring - each occurrence adds more to the score
+        const termScore = Math.min(occurrences * 30, 85) * weight; // Was occurrences * 25, 80
         rawScore += termScore;
       }
     });
     
-    // More stringent normalization
-    // Lower floor value for more honest scoring
-    const normalizedScore = Math.min(95, Math.max(15, (rawScore / maxPossibleScore) * 125));
+    // More generous normalization
+    // Higher floor value for more encouraging scoring
+    const normalizedScore = Math.min(95, Math.max(35, (rawScore / maxPossibleScore) * 130)); // Was 15, 125
     
-    // Add slight randomness for more realistic variation
-    const finalScore = Math.round(normalizedScore * 0.9 + Math.random() * 8);
-    const clampedScore = Math.min(95, Math.max(15, finalScore));
+    // Add slight randomness for more realistic variation with higher floor
+    const finalScore = Math.round(normalizedScore * 0.92 + Math.random() * 10); // Was 0.9, 8
+    const clampedScore = Math.min(95, Math.max(35, finalScore)); // Was 15
     
     const status = getProfileStatus(clampedScore);
     
@@ -499,29 +504,29 @@ export const analyzeProfile = (profileContent: string): ProfileSection[] => {
       photo: [
         'Your profile photo and background align with top LinkedIn voices standards.',  // High
         'Your profile photo is acceptable but could be enhanced for better brand alignment.',      // Medium
-        'Your profile photo and background need significant improvement to meet professional standards.'  // Low
+        'Your profile photo and background need some improvement to meet professional standards.'  // Low (more positive wording)
       ],
       headline: [
         'Your headline effectively showcases your unique value proposition with trending keywords.',
-        'Your headline is adequate but needs stronger positioning and relevant keywords.',
-        'Your headline lacks impact and requires significant improvement to attract attention.'
+        'Your headline is good but needs stronger positioning and relevant keywords.',
+        'Your headline has potential but requires refinement to attract more attention.'
       ],
       experience: [
         'Your experience section excels with quantified achievements and compelling storytelling.',
-        'Your experience section describes responsibilities but needs more quantifiable achievements.',
-        'Your experience section lacks impact statements and specific accomplishments.'
+        'Your experience section describes responsibilities well but needs more quantifiable achievements.',
+        'Your experience section has a good foundation but needs more impact statements.'
       ],
       skills: [
         'Your skills section features in-demand skills with strong endorsements from colleagues.',
-        'Your skills section has relevant skills but needs more strategic endorsements.',
-        'Your skills section lacks critical skills needed in today\'s job market.'
+        'Your skills section has relevant skills but would benefit from more strategic endorsements.',
+        'Your skills section has a good start but could include more critical skills for today\'s job market.'
       ]
     };
     
     let descriptionIndex = 0;
-    if (clampedScore < 70 && clampedScore >= 40) {
+    if (clampedScore < 65 && clampedScore >= 35) { // Was 70, 40
       descriptionIndex = 1;
-    } else if (clampedScore < 40) {
+    } else if (clampedScore < 35) { // Was 40
       descriptionIndex = 2;
     }
     
@@ -534,25 +539,25 @@ export const analyzeProfile = (profileContent: string): ProfileSection[] => {
     });
   });
   
-  // Special handling for activity score using our new advanced detection system
+  // Special handling for activity score using our improved detection system
   const activityInfo = sectionWeightages.find(s => s.id === 'activity');
   if (activityInfo) {
-    // Get activity score from our new detection system
+    // Get activity score from our improved detection system
     const activityScore = detectActivityLevel(content);
     
     const activityStatus = getProfileStatus(activityScore);
     
-    // Activity descriptions
+    // Activity descriptions with more positive wording
     const activityDescriptions = [
       'Your content strategy shows consistent engagement and thought leadership in your field.',
-      'Your LinkedIn activity shows some engagement but lacks consistency or strategy.',
-      'Your LinkedIn presence shows minimal activity or engagement with your network.'
+      'Your LinkedIn activity shows good engagement with potential for a more consistent strategy.',
+      'Your LinkedIn presence has a foundation to build upon with increased activity.'
     ];
     
     let descriptionIndex = 0;
-    if (activityScore < 70 && activityScore >= 40) {
+    if (activityScore < 65 && activityScore >= 35) { // Was 70, 40
       descriptionIndex = 1;
-    } else if (activityScore < 40) {
+    } else if (activityScore < 35) { // Was 40
       descriptionIndex = 2;
     }
     
@@ -575,7 +580,7 @@ function countOccurrences(content: string, term: string): number {
   return matches ? matches.length : 0;
 }
 
-// Generate random scores for sections with realistic variation
+// Generate random scores for sections with more encouraging baseline
 function generateRandomScores(min: number, max: number): ProfileSection[] {
   return sectionWeightages.map(section => {
     // Generate a random score within the specified range
@@ -592,27 +597,27 @@ function generateRandomScores(min: number, max: number): ProfileSection[] {
   });
 }
 
-// Generate mock profile analysis based on the scoring algorithm
+// Generate mock profile analysis based on the revised scoring algorithm
 export const generateMockProfileAnalysis = (profileContent?: string): ProfileSection[] => {
   // If profile content is provided, analyze it
   if (profileContent) {
     return analyzeProfile(profileContent);
   }
   
-  // For demo purposes with no content, generate more realistic demo profiles
+  // For demo purposes with no content, generate more encouraging demo profiles
   const profileQuality = Math.random();
   
   if (profileQuality > 0.85) {
     // Top-tier profile (LinkedIn Top Voice 2024 quality)
-    return generateRandomScores(75, 90);
+    return generateRandomScores(80, 95); // Was 75, 90
   } else if (profileQuality > 0.6) {
     // Above average profile
-    return generateRandomScores(60, 75);
+    return generateRandomScores(65, 80); // Was 60, 75
   } else if (profileQuality > 0.35) {
     // Average profile
-    return generateRandomScores(40, 60);
+    return generateRandomScores(50, 65); // Was 40, 60
   } else {
     // Below average profile
-    return generateRandomScores(20, 40);
+    return generateRandomScores(35, 50); // Was 20, 40
   }
 };

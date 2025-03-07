@@ -15,30 +15,30 @@ const ProfileScore: React.FC<ProfileScoreProps> = ({
   className 
 }) => {
   const getScoreColor = (score: number) => {
-    if (score >= 90) return 'text-green-600';
-    if (score >= 80) return 'text-green-500';
-    if (score >= 70) return 'text-blue-500';
-    if (score >= 60) return 'text-amber-500';
-    if (score >= 40) return 'text-orange-500';
+    if (score >= 85) return 'text-green-600';
+    if (score >= 70) return 'text-green-500';
+    if (score >= 55) return 'text-blue-500';
+    if (score >= 40) return 'text-amber-500';
+    if (score >= 25) return 'text-orange-500';
     return 'text-red-500';
   };
 
   const getScoreText = (score: number) => {
-    if (score >= 90) return 'Top 1%';
-    if (score >= 80) return 'Outstanding';
-    if (score >= 70) return 'Excellent';
-    if (score >= 60) return 'Good';
-    if (score >= 40) return 'Needs Work';
-    return 'Significant Improvement Needed';
+    if (score >= 85) return 'Top 1%';
+    if (score >= 70) return 'Outstanding';
+    if (score >= 55) return 'Excellent';
+    if (score >= 40) return 'Good';
+    if (score >= 25) return 'Progressing';
+    return 'Getting Started';
   };
   
   const getScoreDescription = (score: number) => {
-    if (score >= 90) return 'Your profile matches the quality of LinkedIn Top Voices for 2024';
-    if (score >= 80) return 'Your profile shows exceptional posting frequency and engagement';
-    if (score >= 70) return 'Your profile demonstrates strong content creation and networking';
-    if (score >= 60) return 'Your profile has regular activity but needs more engagement';
-    if (score >= 40) return 'Your profile needs more consistent posting and engagement';
-    return 'Your profile shows minimal activity and requires a content strategy';
+    if (score >= 85) return 'Your profile matches the quality of LinkedIn Top Voices for 2024';
+    if (score >= 70) return 'Your profile shows exceptional posting frequency and engagement';
+    if (score >= 55) return 'Your profile demonstrates strong content creation and networking';
+    if (score >= 40) return 'Your profile has good activity and engagement potential';
+    if (score >= 25) return 'Your profile is developing with more consistent posting';
+    return 'Your profile has the foundation for a content strategy';
   };
 
   const sizesMap = {
