@@ -1,4 +1,3 @@
-
 /**
  * Profile scoring algorithm calibrated based on analysis of 2024 LinkedIn Top Voices profiles.
  * This utility provides weights and scoring functions for LinkedIn profile analysis.
@@ -12,7 +11,6 @@ export interface SectionWeight {
 }
 
 // Recalibrated weightages based on analysis of top LinkedIn voices for 2024
-// Removed recommendations and significantly increased activity weight
 export const sectionWeightages: SectionWeight[] = [
   {
     id: 'photo',
@@ -41,7 +39,7 @@ export const sectionWeightages: SectionWeight[] = [
   {
     id: 'activity',
     title: 'Content & Activity',
-    weight: 0.38, // Significantly increased from 0.28 (added the 0.10 from recommendations)
+    weight: 0.38, // Significantly increased
     description: 'Regular posting and engagement'
   }
 ];
@@ -190,89 +188,243 @@ export const getRecommendations = (sectionId: string, score: number): string[] =
   return recommendations[sectionId]?.[tier] || recommendations['headline'][tier]; // Default to headline if section not found
 };
 
+// COMPLETELY REVAMPED ACTIVITY DETECTION
+// This function extracts and scores LinkedIn activity from profile content
+const detectActivityLevel = (content: string): number => {
+  // If content is empty or too short, return minimum score
+  if (!content || content.length < 50) {
+    return 15; // Minimum score
+  }
+
+  console.log("Analyzing content for activity patterns...");
+  
+  // Convert to lowercase for consistent matching
+  const text = content.toLowerCase();
+  
+  // Initialize score components
+  let postingFrequencyScore = 0;
+  let contentCreationScore = 0;
+  let engagementScore = 0;
+  let networkingScore = 0;
+  let featuresUsageScore = 0;
+  
+  // 1. POSTING FREQUENCY INDICATORS
+  const frequencyKeywords = [
+    {regex: /post(?:s|ed|ing)?\s+daily/i, weight: 10},
+    {regex: /post(?:s|ed|ing)?\s+every\s+day/i, weight: 10},
+    {regex: /daily\s+post(?:s|ing)?/i, weight: 10},
+    {regex: /post(?:s|ed|ing)?\s+(\d+)\s+times\s+(?:a|per)\s+day/i, weight: 12},
+    {regex: /(\d+)\s+post(?:s|ing)?\s+(?:a|per)\s+day/i, weight: 12},
+    
+    {regex: /post(?:s|ed|ing)?\s+weekly/i, weight: 8},
+    {regex: /weekly\s+post(?:s|ing)?/i, weight: 8},
+    {regex: /post(?:s|ed|ing)?\s+(\d+)\s+times\s+(?:a|per)\s+week/i, weight: 9},
+    {regex: /(\d+)\s+post(?:s|ing)?\s+(?:a|per)\s+week/i, weight: 9},
+    
+    {regex: /post(?:s|ed|ing)?\s+bi-weekly/i, weight: 7},
+    {regex: /post(?:s|ed|ing)?\s+every\s+other\s+week/i, weight: 7},
+    
+    {regex: /post(?:s|ed|ing)?\s+monthly/i, weight: 5},
+    {regex: /monthly\s+post(?:s|ing)?/i, weight: 5},
+    {regex: /post(?:s|ed|ing)?\s+(\d+)\s+times\s+(?:a|per)\s+month/i, weight: 6},
+    {regex: /(\d+)\s+post(?:s|ing)?\s+(?:a|per)\s+month/i, weight: 6},
+    
+    {regex: /regular(?:ly)?\s+post(?:s|ing)?/i, weight: 7},
+    {regex: /frequent(?:ly)?\s+post(?:s|ing)?/i, weight: 7},
+    {regex: /consistent(?:ly)?\s+post(?:s|ing)?/i, weight: 7}
+  ];
+  
+  // Check each frequency keyword
+  for (const {regex, weight} of frequencyKeywords) {
+    if (regex.test(text)) {
+      postingFrequencyScore += weight;
+      console.log(`Found posting frequency: ${regex.toString()} (+${weight})`);
+    }
+  }
+  
+  // Cap the posting frequency score
+  postingFrequencyScore = Math.min(25, postingFrequencyScore);
+  
+  // 2. CONTENT CREATION INDICATORS
+  const contentTypes = [
+    {regex: /(?:write|wrote|writing|author|authored)\s+(?:article|post|content)/i, weight: 5},
+    {regex: /(?:publish|published|publishing)\s+(?:article|post|content)/i, weight: 5},
+    {regex: /(?:share|shared|sharing)\s+(?:article|post|content|update)/i, weight: 4},
+    {regex: /(?:create|created|creating)\s+(?:content|post|video|carousel)/i, weight: 5},
+    {regex: /newsletter/i, weight: 7},
+    {regex: /blog\s+(?:post|article)/i, weight: 5},
+    {regex: /video\s+(?:content|post|series)/i, weight: 6},
+    {regex: /carousel\s+(?:post|content)/i, weight: 6},
+    {regex: /infographic/i, weight: 5},
+    {regex: /poll/i, weight: 4},
+    {regex: /document/i, weight: 3},
+    {regex: /presentation|slideshow|slide\s+deck/i, weight: 5},
+    {regex: /(?:live|livestream|webinar|podcast|audio)/i, weight: 7},
+    {regex: /thought\s+leadership/i, weight: 6},
+    {regex: /original\s+content/i, weight: 5},
+    {regex: /content\s+series/i, weight: 6},
+    {regex: /content\s+strategy/i, weight: 5}
+  ];
+  
+  // Check each content type
+  for (const {regex, weight} of contentTypes) {
+    if (regex.test(text)) {
+      contentCreationScore += weight;
+      console.log(`Found content type: ${regex.toString()} (+${weight})`);
+    }
+  }
+  
+  // Cap the content creation score
+  contentCreationScore = Math.min(25, contentCreationScore);
+  
+  // 3. ENGAGEMENT INDICATORS
+  const engagementTypes = [
+    {regex: /(?:comment|commented|commenting)\s+on/i, weight: 4},
+    {regex: /(?:reply|replied|replying)\s+to/i, weight: 4},
+    {regex: /(?:engage|engaged|engaging)\s+with/i, weight: 4},
+    {regex: /(?:interact|interacted|interacting)\s+with/i, weight: 4},
+    {regex: /(?:discussion|conversation|dialogue|debate)/i, weight: 3},
+    {regex: /(?:like|liked|liking)\s+post/i, weight: 2},
+    {regex: /(?:react|reacted|reacting)\s+to/i, weight: 2},
+    {regex: /high\s+engagement/i, weight: 5},
+    {regex: /engagement\s+rate/i, weight: 5},
+    {regex: /many\s+(?:comments|likes|reactions)/i, weight: 4},
+    {regex: /(?:\d+)[k+]?\s+(?:views|impressions)/i, weight: 5},
+    {regex: /(?:viral|trending)\s+post/i, weight: 6},
+    {regex: /popular\s+(?:post|content|article)/i, weight: 4},
+    {regex: /community\s+(?:building|engagement)/i, weight: 5}
+  ];
+  
+  // Check each engagement type
+  for (const {regex, weight} of engagementTypes) {
+    if (regex.test(text)) {
+      engagementScore += weight;
+      console.log(`Found engagement indicator: ${regex.toString()} (+${weight})`);
+    }
+  }
+  
+  // Cap the engagement score
+  engagementScore = Math.min(20, engagementScore);
+  
+  // 4. NETWORKING INDICATORS
+  const networkingTypes = [
+    {regex: /(?:connection|connect|connected|connecting)\s+with/i, weight: 3},
+    {regex: /(?:follow|followed|following)\s+(?:company|influencer|thought leader|expert)/i, weight: 3},
+    {regex: /(?:network|networking|networked)\s+with/i, weight: 3},
+    {regex: /(?:collaborate|collaborated|collaborating)/i, weight: 4},
+    {regex: /(?:partnership|partner|partnered|partnering)/i, weight: 4},
+    {regex: /(?:\d+)[k+]?\s+(?:connection|follower)/i, weight: 5},
+    {regex: /growing\s+(?:network|audience|following)/i, weight: 4},
+    {regex: /(?:build|building|built)\s+(?:relationship|community)/i, weight: 4}
+  ];
+  
+  // Check each networking type
+  for (const {regex, weight} of networkingTypes) {
+    if (regex.test(text)) {
+      networkingScore += weight;
+      console.log(`Found networking indicator: ${regex.toString()} (+${weight})`);
+    }
+  }
+  
+  // Cap the networking score
+  networkingScore = Math.min(15, networkingScore);
+  
+  // 5. LINKEDIN FEATURES USAGE
+  const featureTypes = [
+    {regex: /creator\s+mode/i, weight: 5},
+    {regex: /linkedin\s+live/i, weight: 5},
+    {regex: /linkedin\s+audio/i, weight: 4},
+    {regex: /linkedin\s+newsletter/i, weight: 6},
+    {regex: /featured\s+section/i, weight: 3},
+    {regex: /linkedin\s+stories/i, weight: 3},
+    {regex: /linkedin\s+events/i, weight: 4},
+    {regex: /linkedin\s+groups/i, weight: 3},
+    {regex: /linkedin\s+analytics/i, weight: 4},
+    {regex: /linkedin\s+articles/i, weight: 4},
+    {regex: /linkedin\s+learning/i, weight: 3},
+    {regex: /linkedin\s+premium/i, weight: 3},
+    {regex: /linkedin\s+sales\s+navigator/i, weight: 3},
+    {regex: /linkedin\s+recruiter/i, weight: 3}
+  ];
+  
+  // Check each feature type
+  for (const {regex, weight} of featureTypes) {
+    if (regex.test(text)) {
+      featuresUsageScore += weight;
+      console.log(`Found LinkedIn feature: ${regex.toString()} (+${weight})`);
+    }
+  }
+  
+  // Cap the features usage score
+  featuresUsageScore = Math.min(15, featuresUsageScore);
+  
+  // SIMPLE KEYWORD DETECTION
+  // Even without structured sentences, detect activity through keywords
+  const activityKeywords = [
+    'post', 'posts', 'posting', 'article', 'content', 'share', 'engage',
+    'comment', 'like', 'react', 'video', 'publish', 'weekly', 'daily',
+    'follower', 'connection', 'network', 'hashtag', 'trending', 'viral',
+    'views', 'impressions', 'reach'
+  ];
+  
+  let keywordCount = 0;
+  activityKeywords.forEach(keyword => {
+    const regex = new RegExp(`\\b${keyword}\\b`, 'gi');
+    const matches = text.match(regex);
+    if (matches) {
+      keywordCount += matches.length;
+      console.log(`Found activity keyword: ${keyword} (${matches.length} times)`);
+    }
+  });
+  
+  // Get additional points from keywords (diminishing returns)
+  let keywordScore = Math.min(10, keywordCount * 0.5);
+  
+  // Calculate weighted final score
+  // Emphasize posting frequency and content creation
+  const combinedScore = 
+    (postingFrequencyScore * 0.3) + 
+    (contentCreationScore * 0.25) + 
+    (engagementScore * 0.2) + 
+    (networkingScore * 0.1) + 
+    (featuresUsageScore * 0.05) +
+    (keywordScore * 0.1);
+  
+  // Normalize to 0-100 scale
+  // Base score ensures even profiles with minimal matches get some score
+  const baseScore = 15; 
+  let finalScore = baseScore + (combinedScore / 1.2);
+  
+  // Cap at 95 to leave room for truly exceptional profiles
+  finalScore = Math.min(95, finalScore);
+  
+  console.log(`Activity detection scores:
+    Posting Frequency: ${postingFrequencyScore}/25
+    Content Creation: ${contentCreationScore}/25
+    Engagement: ${engagementScore}/20
+    Networking: ${networkingScore}/15
+    LinkedIn Features: ${featuresUsageScore}/15
+    Keywords: ${keywordScore}/10
+    Combined Raw Score: ${combinedScore}
+    Final Score: ${finalScore}`);
+  
+  return finalScore;
+};
+
 // Analyze a profile based on provided content
 export const analyzeProfile = (profileContent: string): ProfileSection[] => {
+  // If content is extremely short or empty, use randomized scores with a lower average
+  if (!profileContent || profileContent.length < 50) {
+    return generateRandomScores(20, 40); // Low scores for empty/short profiles
+  }
+  
   // Convert to lowercase for case-insensitive matching
   const content = profileContent.toLowerCase();
   
-  // Enhanced activity detection patterns
-  const activityPatterns = [
-    // Post frequency indicators
-    /post(?:s|ed|ing)?\s+(?:daily|every day|weekly|bi-weekly|monthly)/i,
-    /(?:daily|weekly|regular|frequent)\s+post(?:s|ing)?/i,
-    /post(?:s|ed|ing)?\s+(\d+)\s+times\s+(?:a|per)\s+(?:day|week|month)/i,
-    /(\d+)\s+post(?:s|ed|ing)?\s+(?:a|per)\s+(?:day|week|month)/i,
-    
-    // Content creation indicators
-    /(?:write|wrote|writing|publish|published|share|shared)\s+(?:article|post|content|update)/i,
-    /(?:create|created|author|authored)\s+(?:content|article|post|video|carousel)/i,
-    /newsletter/i,
-    /blog\s+(?:post|article)/i,
-    
-    // Engagement indicators
-    /(?:comment|commented|commenting|reply|replied|replying)\s+on/i,
-    /(?:engage|engaged|engaging|interaction|interacting)\s+with/i,
-    /(?:discussion|conversation|dialogue|debate|forum)/i,
-    /(?:like|liked|liking|react|reacted|reacting)\s+to/i,
-    
-    // Content format indicators
-    /(?:video|carousel|infographic|poll|document|presentation|slide)/i,
-    /(?:live|livestream|webinar|podcast|audio)/i,
-    
-    // Network activity indicators
-    /(?:connection|connect|connected|connecting)\s+with/i,
-    /(?:follow|followed|following)\s+(?:company|influencer|thought leader|expert)/i,
-    /(?:network|networking|networked)\s+with/i,
-    
-    // LinkedIn specific feature indicators
-    /(?:creator mode|linkedin live|linkedin audio|newsletter|featured section)/i
-  ];
+  // For normal profiles, run the indicators-based analysis
+  const sections: ProfileSection[] = [];
   
-  // Count activity pattern matches
-  const countActivityMatches = (text: string): number => {
-    let activityMatchCount = 0;
-    
-    // Check for activity patterns
-    activityPatterns.forEach(pattern => {
-      const matches = text.match(pattern);
-      if (matches) {
-        activityMatchCount += matches.length;
-      }
-    });
-    
-    // Check for common activity related terms
-    const activityTerms = [
-      'post', 'posts', 'posted', 'posting', 
-      'article', 'articles', 'content', 
-      'comment', 'commented', 'comments', 
-      'share', 'shared', 'shares', 
-      'engage', 'engaged', 'engagement',
-      'like', 'liked', 'likes',
-      'video', 'videos', 'carousel',
-      'publish', 'published', 'publishing',
-      'write', 'wrote', 'writing',
-      'weekly', 'daily', 'monthly',
-      'regular', 'regularly', 'frequency',
-      'trending', 'trend', 'trends',
-      'viral', 'popular', 'engagement rate',
-      'follower', 'followers', 'following',
-      'hashtag', 'hashtags', 'newsletter'
-    ];
-    
-    // Count activity terms
-    activityTerms.forEach(term => {
-      // Word boundary search for whole words
-      const regex = new RegExp(`\\b${term}\\b`, 'gi');
-      const termMatches = text.match(regex);
-      if (termMatches) {
-        activityMatchCount += termMatches.length * 0.5; // Half weight for simple terms
-      }
-    });
-    
-    return activityMatchCount;
-  };
-  
-  // Scoring indicators - what we look for in top 2024 LinkedIn voices profiles
+  // Process standard sections (photo, headline, experience, skills)
   const indicators = {
     photo: [
       { term: 'professional photo', weight: 0.3, baseScore: 30 },
@@ -308,15 +460,6 @@ export const analyzeProfile = (profileContent: string): ProfileSection[] => {
     ]
   };
   
-  // If content is extremely short or empty, use randomized scores with a lower average
-  if (!profileContent || profileContent.length < 50) {
-    return generateRandomScores(20, 40); // Low scores for empty/short profiles
-  }
-  
-  // For normal profiles, run the indicators-based analysis
-  const sections: ProfileSection[] = [];
-  
-  // Process each standard section based on indicators
   Object.entries(indicators).forEach(([sectionId, terms]) => {
     const sectionInfo = sectionWeightages.find(s => s.id === sectionId);
     if (!sectionInfo) return;
@@ -391,25 +534,11 @@ export const analyzeProfile = (profileContent: string): ProfileSection[] => {
     });
   });
   
-  // Special handling for activity score using pattern matching
+  // Special handling for activity score using our new advanced detection system
   const activityInfo = sectionWeightages.find(s => s.id === 'activity');
   if (activityInfo) {
-    // Count activity matches using our enhanced patterns
-    const activityCount = countActivityMatches(content);
-    
-    // Log for debugging
-    console.log(`Activity pattern matches: ${activityCount}`);
-    
-    // Calculate activity score based on pattern matches
-    // Base score ensures even profiles with minimal activity get some score
-    const baseActivityScore = 15;
-    
-    // Score increases with number of activity matches, but with diminishing returns
-    let activityScore = Math.min(95, baseActivityScore + Math.min(activityCount * 5, 80));
-    
-    // Add slight randomness for more realistic variation
-    activityScore = Math.round(activityScore * 0.95 + Math.random() * 5);
-    activityScore = Math.min(95, Math.max(15, activityScore));
+    // Get activity score from our new detection system
+    const activityScore = detectActivityLevel(content);
     
     const activityStatus = getProfileStatus(activityScore);
     
@@ -429,7 +558,7 @@ export const analyzeProfile = (profileContent: string): ProfileSection[] => {
     
     sections.push({
       title: activityInfo.title,
-      score: activityScore,
+      score: Math.round(activityScore),
       status: activityStatus,
       description: activityDescriptions[descriptionIndex],
       recommendations: getRecommendations('activity', activityScore)
