@@ -1,3 +1,4 @@
+
 /**
  * Profile scoring algorithm calibrated based on analysis of 2024 LinkedIn Top Voices profiles.
  * This utility provides weights and scoring functions for LinkedIn profile analysis.
@@ -175,26 +176,6 @@ export const getRecommendations = (sectionId: string, score: number): string[] =
         'Follow and engage with industry leaders in your field',
         'Share and comment on relevant industry news with your perspective'
       ]
-    ],
-    'recommendations': [
-      // High score
-      [
-        'Request updated recommendations to reflect your current skills',
-        'Exchange recommendations with new colleagues or partners',
-        'Request specific skills be mentioned in new recommendations'
-      ],
-      // Medium score
-      [
-        'Request recommendations from at least 3-5 more colleagues',
-        'Give recommendations to receive more in return',
-        'Ask recommenders to highlight specific skills or achievements'
-      ],
-      // Low score
-      [
-        'Request at least 3-5 recommendations from previous managers',
-        'Provide context to recommenders about what to highlight',
-        'Write recommendations for others to encourage reciprocation'
-      ]
     ]
   };
 
@@ -213,6 +194,83 @@ export const getRecommendations = (sectionId: string, score: number): string[] =
 export const analyzeProfile = (profileContent: string): ProfileSection[] => {
   // Convert to lowercase for case-insensitive matching
   const content = profileContent.toLowerCase();
+  
+  // Enhanced activity detection patterns
+  const activityPatterns = [
+    // Post frequency indicators
+    /post(?:s|ed|ing)?\s+(?:daily|every day|weekly|bi-weekly|monthly)/i,
+    /(?:daily|weekly|regular|frequent)\s+post(?:s|ing)?/i,
+    /post(?:s|ed|ing)?\s+(\d+)\s+times\s+(?:a|per)\s+(?:day|week|month)/i,
+    /(\d+)\s+post(?:s|ed|ing)?\s+(?:a|per)\s+(?:day|week|month)/i,
+    
+    // Content creation indicators
+    /(?:write|wrote|writing|publish|published|share|shared)\s+(?:article|post|content|update)/i,
+    /(?:create|created|author|authored)\s+(?:content|article|post|video|carousel)/i,
+    /newsletter/i,
+    /blog\s+(?:post|article)/i,
+    
+    // Engagement indicators
+    /(?:comment|commented|commenting|reply|replied|replying)\s+on/i,
+    /(?:engage|engaged|engaging|interaction|interacting)\s+with/i,
+    /(?:discussion|conversation|dialogue|debate|forum)/i,
+    /(?:like|liked|liking|react|reacted|reacting)\s+to/i,
+    
+    // Content format indicators
+    /(?:video|carousel|infographic|poll|document|presentation|slide)/i,
+    /(?:live|livestream|webinar|podcast|audio)/i,
+    
+    // Network activity indicators
+    /(?:connection|connect|connected|connecting)\s+with/i,
+    /(?:follow|followed|following)\s+(?:company|influencer|thought leader|expert)/i,
+    /(?:network|networking|networked)\s+with/i,
+    
+    // LinkedIn specific feature indicators
+    /(?:creator mode|linkedin live|linkedin audio|newsletter|featured section)/i
+  ];
+  
+  // Count activity pattern matches
+  const countActivityMatches = (text: string): number => {
+    let activityMatchCount = 0;
+    
+    // Check for activity patterns
+    activityPatterns.forEach(pattern => {
+      const matches = text.match(pattern);
+      if (matches) {
+        activityMatchCount += matches.length;
+      }
+    });
+    
+    // Check for common activity related terms
+    const activityTerms = [
+      'post', 'posts', 'posted', 'posting', 
+      'article', 'articles', 'content', 
+      'comment', 'commented', 'comments', 
+      'share', 'shared', 'shares', 
+      'engage', 'engaged', 'engagement',
+      'like', 'liked', 'likes',
+      'video', 'videos', 'carousel',
+      'publish', 'published', 'publishing',
+      'write', 'wrote', 'writing',
+      'weekly', 'daily', 'monthly',
+      'regular', 'regularly', 'frequency',
+      'trending', 'trend', 'trends',
+      'viral', 'popular', 'engagement rate',
+      'follower', 'followers', 'following',
+      'hashtag', 'hashtags', 'newsletter'
+    ];
+    
+    // Count activity terms
+    activityTerms.forEach(term => {
+      // Word boundary search for whole words
+      const regex = new RegExp(`\\b${term}\\b`, 'gi');
+      const termMatches = text.match(regex);
+      if (termMatches) {
+        activityMatchCount += termMatches.length * 0.5; // Half weight for simple terms
+      }
+    });
+    
+    return activityMatchCount;
+  };
   
   // Scoring indicators - what we look for in top 2024 LinkedIn voices profiles
   const indicators = {
@@ -247,21 +305,6 @@ export const analyzeProfile = (profileContent: string): ProfileSection[] => {
       { term: 'endorsement', weight: 0.25, baseScore: 30 },
       { term: 'expertise', weight: 0.15, baseScore: 30 },
       { term: 'proficient', weight: 0.15, baseScore: 30 }
-    ],
-    // Enhanced activity indicators with more weight on posting frequency and engagement
-    activity: [
-      { term: 'post', weight: 0.25, baseScore: 30 }, // Increased weight
-      { term: 'weekly', weight: 0.15, baseScore: 30 }, // Added frequency indicator
-      { term: 'daily', weight: 0.15, baseScore: 30 }, // Added frequency indicator
-      { term: 'article', weight: 0.1, baseScore: 30 },
-      { term: 'comment', weight: 0.15, baseScore: 30 }, // Increased weight for engagement
-      { term: 'share', weight: 0.1, baseScore: 30 },
-      { term: 'engage', weight: 0.15, baseScore: 30 }, // Increased weight for engagement
-      { term: 'content', weight: 0.1, baseScore: 30 },
-      { term: 'newsletter', weight: 0.1, baseScore: 30 },
-      { term: 'video', weight: 0.1, baseScore: 30 }, // Added for content diversity
-      { term: 'regular', weight: 0.15, baseScore: 30 }, // Added for consistency
-      { term: 'trending', weight: 0.1, baseScore: 30 } // Added for relevance
     ]
   };
   
@@ -273,7 +316,7 @@ export const analyzeProfile = (profileContent: string): ProfileSection[] => {
   // For normal profiles, run the indicators-based analysis
   const sections: ProfileSection[] = [];
   
-  // Process each section based on indicators
+  // Process each standard section based on indicators
   Object.entries(indicators).forEach(([sectionId, terms]) => {
     const sectionInfo = sectionWeightages.find(s => s.id === sectionId);
     if (!sectionInfo) return;
@@ -329,16 +372,6 @@ export const analyzeProfile = (profileContent: string): ProfileSection[] => {
         'Your skills section features in-demand skills with strong endorsements from colleagues.',
         'Your skills section has relevant skills but needs more strategic endorsements.',
         'Your skills section lacks critical skills needed in today\'s job market.'
-      ],
-      activity: [
-        'Your content strategy shows consistent engagement and thought leadership in your field.',
-        'Your LinkedIn activity shows some engagement but lacks consistency or strategy.',
-        'Your LinkedIn presence shows minimal activity or engagement with your network.'
-      ],
-      recommendations: [
-        'Your recommendations powerfully validate your expertise and professional impact.',
-        'You have some valuable recommendations but need more diverse testimonials.',
-        'Your profile needs more quality recommendations to build credibility.'
       ]
     };
     
@@ -357,6 +390,51 @@ export const analyzeProfile = (profileContent: string): ProfileSection[] => {
       recommendations: getRecommendations(sectionId, clampedScore)
     });
   });
+  
+  // Special handling for activity score using pattern matching
+  const activityInfo = sectionWeightages.find(s => s.id === 'activity');
+  if (activityInfo) {
+    // Count activity matches using our enhanced patterns
+    const activityCount = countActivityMatches(content);
+    
+    // Log for debugging
+    console.log(`Activity pattern matches: ${activityCount}`);
+    
+    // Calculate activity score based on pattern matches
+    // Base score ensures even profiles with minimal activity get some score
+    const baseActivityScore = 15;
+    
+    // Score increases with number of activity matches, but with diminishing returns
+    let activityScore = Math.min(95, baseActivityScore + Math.min(activityCount * 5, 80));
+    
+    // Add slight randomness for more realistic variation
+    activityScore = Math.round(activityScore * 0.95 + Math.random() * 5);
+    activityScore = Math.min(95, Math.max(15, activityScore));
+    
+    const activityStatus = getProfileStatus(activityScore);
+    
+    // Activity descriptions
+    const activityDescriptions = [
+      'Your content strategy shows consistent engagement and thought leadership in your field.',
+      'Your LinkedIn activity shows some engagement but lacks consistency or strategy.',
+      'Your LinkedIn presence shows minimal activity or engagement with your network.'
+    ];
+    
+    let descriptionIndex = 0;
+    if (activityScore < 70 && activityScore >= 40) {
+      descriptionIndex = 1;
+    } else if (activityScore < 40) {
+      descriptionIndex = 2;
+    }
+    
+    sections.push({
+      title: activityInfo.title,
+      score: activityScore,
+      status: activityStatus,
+      description: activityDescriptions[descriptionIndex],
+      recommendations: getRecommendations('activity', activityScore)
+    });
+  }
   
   return sections;
 };
