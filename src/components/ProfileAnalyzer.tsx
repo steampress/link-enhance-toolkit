@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -21,12 +20,21 @@ const ProfileAnalyzer: React.FC = () => {
   const [sections, setSections] = useState<ProfileSectionType[]>([]);
   const [overallScore, setOverallScore] = useState(0);
 
-  // Generate demo analysis when component mounts
   useEffect(() => {
     const demoSections = generateMockProfileAnalysis();
     setSections(demoSections);
     setOverallScore(calculateOverallScore(demoSections));
   }, []);
+
+  useEffect(() => {
+    console.log("Current active tab:", activeTab);
+    
+    const allTabTriggers = document.querySelectorAll('[data-value]');
+    console.log("Available tabs:", Array.from(allTabTriggers).map(el => ({
+      value: el.getAttribute('data-value'),
+      text: el.textContent
+    })));
+  }, [activeTab]);
 
   const handleAnalyze = () => {
     if (!profileUrl && !profileContent) {
@@ -36,10 +44,7 @@ const ProfileAnalyzer: React.FC = () => {
     
     setIsAnalyzing(true);
     
-    // Simulate analysis delay
     setTimeout(() => {
-      // Generate analysis based on the provided content
-      // This is where the actual profile analysis would happen
       const analysisInput = profileContent || 
                            `LinkedIn URL: ${profileUrl} - We would fetch content from this URL in a real implementation`;
       

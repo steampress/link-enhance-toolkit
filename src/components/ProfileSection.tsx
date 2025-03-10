@@ -77,12 +77,30 @@ const ProfileSection: React.FC<ProfileSectionProps> = ({
     if (isExternal && url) {
       window.open(url, '_blank');
     } else if (tab) {
-      // Find the parent ProfileAnalyzer component and set its activeTab
-      const profileAnalyzerTabs = document.querySelector('[data-tabs="profile-analyzer"]');
-      if (profileAnalyzerTabs) {
-        const tabTrigger = profileAnalyzerTabs.querySelector(`[data-value="${tab}"]`);
-        if (tabTrigger && tabTrigger instanceof HTMLElement) {
-          tabTrigger.click();
+      // More reliable way to find and click the tab
+      const tabsTrigger = document.querySelector(`[data-value="${tab}"]`);
+      
+      if (tabsTrigger && tabsTrigger instanceof HTMLElement) {
+        console.log(`Clicking tab: ${tab}`);
+        tabsTrigger.click();
+      } else {
+        console.error(`Tab with data-value="${tab}" not found`);
+        
+        // Fallback mechanism - try to find by role or other attributes
+        const allTabs = document.querySelectorAll('[role="tab"]');
+        let tabFound = false;
+        
+        allTabs.forEach(tabElement => {
+          if (tabElement instanceof HTMLElement && 
+              tabElement.textContent?.toLowerCase().includes(tab.toLowerCase().replace('-', ' '))) {
+            console.log(`Found tab by content: ${tabElement.textContent}`);
+            tabElement.click();
+            tabFound = true;
+          }
+        });
+        
+        if (!tabFound) {
+          console.error('Tab not found by any method');
         }
       }
     }
