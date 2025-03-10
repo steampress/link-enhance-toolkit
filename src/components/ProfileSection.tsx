@@ -2,6 +2,7 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { ExternalLink } from 'lucide-react';
 
 interface ProfileSectionProps {
   title: string;
@@ -40,6 +41,51 @@ const ProfileSection: React.FC<ProfileSectionProps> = ({
     }
   };
 
+  // Define the optimization targets based on section title
+  const getOptimizationTarget = (title: string): { tab: string, url?: string, isExternal?: boolean } => {
+    const titleLower = title.toLowerCase();
+    
+    if (titleLower.includes('photo') || titleLower.includes('background')) {
+      return { tab: 'profile-photo' };
+    } else if (titleLower.includes('headline') || titleLower.includes('summary')) {
+      return { tab: 'content' };
+    } else if (titleLower.includes('experience') || titleLower.includes('accomplishments')) {
+      return { tab: 'content' };
+    } else if (titleLower.includes('skills') || titleLower.includes('endorsements')) {
+      return { 
+        tab: '', 
+        url: 'https://www.linkedin.com/help/linkedin/answer/a566049/request-a-recommendation',
+        isExternal: true 
+      };
+    } else if (titleLower.includes('content') || titleLower.includes('activity')) {
+      return { 
+        tab: '', 
+        url: 'https://www.linkedin.com/business/sales/blog/profile-best-practices/17-steps-to-a-better-linkedin-profile-in-2017',
+        isExternal: true 
+      };
+    }
+    
+    // Default case
+    return { tab: 'sections' };
+  };
+
+  const handleOptimize = () => {
+    const { tab, url, isExternal } = getOptimizationTarget(title);
+    
+    if (isExternal && url) {
+      window.open(url, '_blank');
+    } else if (tab) {
+      // Find the parent ProfileAnalyzer component and set its activeTab
+      const profileAnalyzerTabs = document.querySelector('[data-tabs="profile-analyzer"]');
+      if (profileAnalyzerTabs) {
+        const tabTrigger = profileAnalyzerTabs.querySelector(`[data-value="${tab}"]`);
+        if (tabTrigger && tabTrigger instanceof HTMLElement) {
+          tabTrigger.click();
+        }
+      }
+    }
+  };
+
   return (
     <div 
       className={cn("glass-card p-6", className)}
@@ -62,23 +108,35 @@ const ProfileSection: React.FC<ProfileSectionProps> = ({
       
       <p className="text-muted-foreground mb-4">{description}</p>
       
-      {recommendations.length > 0 && (
-        <div className="mb-4">
-          <h4 className="font-medium mb-2">Recommendations:</h4>
-          <ul className="space-y-2">
-            {recommendations.map((rec, index) => (
-              <li key={index} className="flex items-start">
-                <span className="text-primary mr-2">•</span>
-                <span className="text-sm">{rec}</span>
-              </li>
-            ))}
-          </ul>
+      <div className="flex flex-col h-full">
+        <div className="flex-grow">
+          {recommendations.length > 0 && (
+            <div className="mb-4">
+              <h4 className="font-medium mb-2">Recommendations:</h4>
+              <ul className="space-y-2">
+                {recommendations.map((rec, index) => (
+                  <li key={index} className="flex items-start">
+                    <span className="text-primary mr-2">•</span>
+                    <span className="text-sm">{rec}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
-      )}
-      
-      <Button variant="outline" size="sm" className="w-full mt-2">
-        Optimize This Section
-      </Button>
+        
+        <Button 
+          variant="outline" 
+          size="sm" 
+          className="w-full mt-auto"
+          onClick={handleOptimize}
+        >
+          {getOptimizationTarget(title).isExternal && (
+            <ExternalLink className="h-4 w-4 mr-2" />
+          )}
+          Optimize This Section
+        </Button>
+      </div>
     </div>
   );
 };

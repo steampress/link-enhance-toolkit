@@ -135,12 +135,18 @@ const ProfileAnalyzer: React.FC = () => {
               </div>
             </div>
             
-            <Tabs defaultValue="sections" className="mb-6" value={activeTab} onValueChange={setActiveTab}>
+            <Tabs 
+              defaultValue="sections" 
+              className="mb-6" 
+              value={activeTab} 
+              onValueChange={setActiveTab}
+              data-tabs="profile-analyzer"
+            >
               <TabsList className="grid w-full grid-cols-1 md:grid-cols-4 mb-4">
-                <TabsTrigger value="sections">Profile Sections</TabsTrigger>
-                <TabsTrigger value="profile-photo">Profile Photo</TabsTrigger>
-                <TabsTrigger value="background">Background</TabsTrigger>
-                <TabsTrigger value="content">Content Editor</TabsTrigger>
+                <TabsTrigger value="sections" data-value="sections">Profile Sections</TabsTrigger>
+                <TabsTrigger value="profile-photo" data-value="profile-photo">Profile Photo</TabsTrigger>
+                <TabsTrigger value="background" data-value="background">Background</TabsTrigger>
+                <TabsTrigger value="content" data-value="content">Content Editor</TabsTrigger>
               </TabsList>
               
               <TabsContent value="sections">
@@ -149,7 +155,7 @@ const ProfileAnalyzer: React.FC = () => {
                     <ProfileSection
                       key={index}
                       {...section}
-                      className="animate-fade-up"
+                      className="animate-fade-up flex flex-col"
                       animationDelay={`${index * 0.1}s`}
                     />
                   ))}
