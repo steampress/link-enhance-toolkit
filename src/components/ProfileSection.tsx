@@ -45,8 +45,10 @@ const ProfileSection: React.FC<ProfileSectionProps> = ({
   const getOptimizationTarget = (title: string): { tab: string, url?: string, isExternal?: boolean } => {
     const titleLower = title.toLowerCase();
     
-    if (titleLower.includes('photo') || titleLower.includes('background')) {
+    if (titleLower.includes('photo')) {
       return { tab: 'profile-photo' };
+    } else if (titleLower.includes('background')) {
+      return { tab: 'background' };
     } else if (titleLower.includes('headline') || titleLower.includes('summary')) {
       return { tab: 'content' };
     } else if (titleLower.includes('experience') || titleLower.includes('accomplishments')) {
