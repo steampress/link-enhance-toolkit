@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { cn } from '@/lib/utils';
 
@@ -43,19 +44,19 @@ const ProfileScore: React.FC<ProfileScoreProps> = ({
 
   const sizesMap = {
     sm: {
-      container: 'w-16 h-16',
-      text: 'text-xl',
-      thickness: 'border-4'
+      container: 'w-14 h-14',
+      text: 'text-lg',
+      thickness: 'border-3'
     },
     md: {
-      container: 'w-24 h-24',
-      text: 'text-3xl',
-      thickness: 'border-6'
+      container: 'w-20 h-20',
+      text: 'text-2xl',
+      thickness: 'border-5'
     },
     lg: {
-      container: 'w-32 h-32',
-      text: 'text-4xl',
-      thickness: 'border-8'
+      container: 'w-28 h-28',
+      text: 'text-3xl',
+      thickness: 'border-6'
     },
   };
 
@@ -81,14 +82,14 @@ const ProfileScore: React.FC<ProfileScoreProps> = ({
             background: `conic-gradient(${scoreColor} ${rotation}deg, transparent 0deg)`
           }} 
         />
-        <div className="bg-background rounded-full flex items-center justify-center w-[calc(100%-16px)] h-[calc(100%-16px)]">
+        <div className="bg-background rounded-full flex items-center justify-center w-[calc(100%-12px)] h-[calc(100%-12px)]">
           <span className={cn("font-bold", text, scoreColor)}>{score}%</span>
         </div>
       </div>
       {showLabel && (
         <div className="mt-2 text-center">
           <p className={cn("font-medium", scoreColor)}>{scoreText}</p>
-          <p className="text-sm text-muted-foreground">{scoreDescription}</p>
+          <p className="text-xs text-muted-foreground max-w-[200px]">{scoreDescription}</p>
         </div>
       )}
     </div>

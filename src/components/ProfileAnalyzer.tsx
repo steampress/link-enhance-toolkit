@@ -112,31 +112,31 @@ const ProfileAnalyzer: React.FC = () => {
           </div>
         ) : (
           <div className="animate-fade-up">
-            <div className="glass-panel rounded-2xl p-8 mb-8">
-              <div className="flex flex-col md:flex-row items-center justify-between gap-8">
+            <div className="glass-panel rounded-2xl p-6 mb-6">
+              <div className="flex flex-col md:flex-row items-center gap-4">
+                <ProfileScore score={overallScore} size="md" />
                 <div className="text-center md:text-left md:flex-1">
-                  <h3 className="text-xl font-semibold mb-2">Your Profile Score</h3>
-                  <p className="text-muted-foreground max-w-md">
-                    Based on our analysis calibrated with top LinkedIn voices, your profile scores {overallScore}%. Here's how you can improve:
+                  <h3 className="text-xl font-semibold mb-1">Your Profile Score</h3>
+                  <p className="text-muted-foreground text-sm mb-3">
+                    Based on our analysis calibrated with top LinkedIn voices, your profile scores {overallScore}%. Here's how we calculate your score:
                   </p>
-                  <div className="mt-4 flex flex-wrap gap-3">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                     {sectionWeightages.map((section) => (
-                      <div key={section.id} className="bg-secondary/20 px-2 py-1 rounded text-xs flex items-center">
-                        <span className="font-medium">{section.title.split(' ')[0]}</span>
-                        <span className="ml-1 text-muted-foreground">{Math.round(section.weight * 100)}%</span>
+                      <div key={section.id} className="bg-secondary/10 px-2 py-1 rounded text-xs flex items-center justify-between">
+                        <span className="font-medium truncate mr-1">{section.title.split(' ')[0]}</span>
+                        <span className="text-muted-foreground whitespace-nowrap">{Math.round(section.weight * 100)}%</span>
                       </div>
                     ))}
                   </div>
-                  <Button className="mt-6" onClick={() => setIsAnalyzed(false)}>
+                  <Button className="mt-4 w-full sm:w-auto" onClick={() => setIsAnalyzed(false)}>
                     Analyze Another Profile
                   </Button>
                 </div>
-                <ProfileScore score={overallScore} size="lg" />
               </div>
             </div>
             
-            <Tabs defaultValue="sections" className="mb-8" value={activeTab} onValueChange={setActiveTab}>
-              <TabsList className="grid w-full grid-cols-1 md:grid-cols-4 mb-6">
+            <Tabs defaultValue="sections" className="mb-6" value={activeTab} onValueChange={setActiveTab}>
+              <TabsList className="grid w-full grid-cols-1 md:grid-cols-4 mb-4">
                 <TabsTrigger value="sections">Profile Sections</TabsTrigger>
                 <TabsTrigger value="profile-photo">Profile Photo</TabsTrigger>
                 <TabsTrigger value="background">Background</TabsTrigger>
@@ -144,7 +144,7 @@ const ProfileAnalyzer: React.FC = () => {
               </TabsList>
               
               <TabsContent value="sections">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {sections.map((section, index) => (
                     <ProfileSection
                       key={index}
@@ -165,7 +165,7 @@ const ProfileAnalyzer: React.FC = () => {
               </TabsContent>
               
               <TabsContent value="content">
-                <div className="space-y-8 animate-fade-up">
+                <div className="space-y-6 animate-fade-up">
                   <GuidedProfileEditor section="headline" />
                   <GuidedProfileEditor section="summary" />
                   <GuidedProfileEditor section="experience" />
