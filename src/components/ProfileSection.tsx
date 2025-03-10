@@ -54,13 +54,13 @@ const ProfileSection: React.FC<ProfileSectionProps> = ({
     } else if (titleLower.includes('skills') || titleLower.includes('endorsements')) {
       return { 
         tab: '', 
-        url: 'https://www.linkedin.com/help/linkedin/answer/a566049/request-a-recommendation',
+        url: 'https://www.forbes.com/sites/robinryan/2019/03/14/baby-boomers-how-to-get-valuable-linkedin-recommendations-and-endorsements/',
         isExternal: true 
       };
     } else if (titleLower.includes('content') || titleLower.includes('activity')) {
       return { 
         tab: '', 
-        url: 'https://www.linkedin.com/business/sales/blog/profile-best-practices/17-steps-to-a-better-linkedin-profile-in-2017',
+        url: 'https://www.linkedin.com/pulse/11-hacks-writing-more-engaging-linkedin-posts-matt-cordas-02eie/',
         isExternal: true 
       };
     }
