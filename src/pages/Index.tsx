@@ -100,7 +100,7 @@ const Index = () => {
         
         <OptimizationTips />
         
-        <section className="py-20">
+        <section id="testimonials" className="py-20">
           <div className="container-custom">
             <div className="glass-panel rounded-2xl p-8 md:p-12">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
@@ -114,14 +114,6 @@ const Index = () => {
                   <p className="text-muted-foreground">
                     Join thousands of professionals who have enhanced their LinkedIn presence and attracted more opportunities.
                   </p>
-                  <div className="flex flex-col sm:flex-row gap-4 pt-2">
-                    <button className="btn-primary h-12 px-6">
-                      Get Started
-                    </button>
-                    <button className="btn-outline h-12 px-6">
-                      Learn More
-                    </button>
-                  </div>
                 </div>
                 
                 <div className="flex justify-center md:justify-end">

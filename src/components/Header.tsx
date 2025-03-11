@@ -26,20 +26,20 @@ const Header: React.FC = () => {
     >
       <div className="container-custom flex items-center justify-between">
         <div className="flex items-center space-x-2">
-          <div className="w-9 h-9 rounded-md bg-primary/90 flex items-center justify-center">
+          <div className="w-9 h-9 rounded-md bg-primary flex items-center justify-center">
             <span className="text-white font-bold text-xl">L</span>
           </div>
           <span className="font-semibold text-lg">LinkedPro</span>
         </div>
         
         <nav className="flex items-center space-x-8">
-          <a href="#features" className="text-foreground/80 hover:text-foreground transition-colors">
+          <a href="#features" className="text-foreground/80 hover:text-primary transition-colors">
             Features
           </a>
-          <a href="#profile-analyzer" className="text-foreground/80 hover:text-foreground transition-colors">
+          <a href="#profile-analyzer" className="text-foreground/80 hover:text-primary transition-colors">
             Profile Analyzer
           </a>
-          <a href="#optimization" className="text-foreground/80 hover:text-foreground transition-colors">
+          <a href="#optimization" className="text-foreground/80 hover:text-primary transition-colors">
             Optimization
           </a>
         </nav>
