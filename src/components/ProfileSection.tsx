@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -41,7 +40,6 @@ const ProfileSection: React.FC<ProfileSectionProps> = ({
     }
   };
 
-  // Define the optimization targets based on section title
   const getOptimizationTarget = (title: string): { tab: string, url?: string, isExternal?: boolean } => {
     const titleLower = title.toLowerCase();
     
@@ -49,9 +47,8 @@ const ProfileSection: React.FC<ProfileSectionProps> = ({
       return { tab: 'profile-photo' };
     } else if (titleLower.includes('background')) {
       return { tab: 'background' };
-    } else if (titleLower.includes('headline') || titleLower.includes('summary')) {
-      return { tab: 'content' };
-    } else if (titleLower.includes('experience') || titleLower.includes('accomplishments')) {
+    } else if (titleLower.includes('headline') || titleLower.includes('summary') || 
+               titleLower.includes('experience') || titleLower.includes('accomplishments')) {
       return { tab: 'content' };
     } else if (titleLower.includes('skills') || titleLower.includes('endorsements')) {
       return { 
@@ -66,8 +63,6 @@ const ProfileSection: React.FC<ProfileSectionProps> = ({
         isExternal: true 
       };
     }
-    
-    // Default case
     return { tab: 'sections' };
   };
 
@@ -77,30 +72,21 @@ const ProfileSection: React.FC<ProfileSectionProps> = ({
     if (isExternal && url) {
       window.open(url, '_blank');
     } else if (tab) {
-      // More reliable way to find and click the tab
-      const tabsTrigger = document.querySelector(`[data-value="${tab}"]`);
-      
-      if (tabsTrigger && tabsTrigger instanceof HTMLElement) {
-        console.log(`Clicking tab: ${tab}`);
-        tabsTrigger.click();
-      } else {
-        console.error(`Tab with data-value="${tab}" not found`);
-        
-        // Fallback mechanism - try to find by role or other attributes
-        const allTabs = document.querySelectorAll('[role="tab"]');
-        let tabFound = false;
-        
-        allTabs.forEach(tabElement => {
-          if (tabElement instanceof HTMLElement && 
-              tabElement.textContent?.toLowerCase().includes(tab.toLowerCase().replace('-', ' '))) {
-            console.log(`Found tab by content: ${tabElement.textContent}`);
-            tabElement.click();
-            tabFound = true;
+      const tabElement = document.querySelector(`[data-state][data-value="${tab}"]`);
+      if (tabElement instanceof HTMLElement) {
+        const tabsRoot = tabElement.closest('[role="tablist"]');
+        if (tabsRoot) {
+          const currentActive = tabsRoot.querySelector('[data-state="active"]');
+          if (currentActive) {
+            currentActive.setAttribute('data-state', 'inactive');
           }
-        });
-        
-        if (!tabFound) {
-          console.error('Tab not found by any method');
+          tabElement.setAttribute('data-state', 'active');
+          tabElement.click();
+          
+          const tabContent = document.querySelector(`[role="tabpanel"][data-state]`);
+          if (tabContent) {
+            tabContent.setAttribute('data-state', 'active');
+          }
         }
       }
     }
