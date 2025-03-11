@@ -11,7 +11,7 @@ const Hero: React.FC = () => {
   };
 
   return (
-    <section className="pt-32 pb-24 overflow-hidden">
+    <section className="pt-28 pb-12 overflow-hidden">
       <div className="container-custom">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div className="space-y-6 animate-fade-up">
@@ -27,21 +27,13 @@ const Hero: React.FC = () => {
               Our AI-powered tools analyze and optimize your LinkedIn profile to make it stand out to recruiters and connections.
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-4 pt-4">
+            <div className="pt-4">
               <Button 
                 size="lg" 
                 className="h-12"
                 onClick={() => scrollToSection('profile-analyzer')}
               >
                 Analyze My Profile
-              </Button>
-              <Button 
-                variant="outline" 
-                size="lg" 
-                className="h-12"
-                onClick={() => scrollToSection('features')}
-              >
-                Learn More
               </Button>
             </div>
           </div>

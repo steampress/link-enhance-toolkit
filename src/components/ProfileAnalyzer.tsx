@@ -1,22 +1,14 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import ProfileScore from '@/components/ui/ProfileScore';
-import ProfileSection from '@/components/ProfileSection';
-import ProfilePhotoEnhancer from '@/components/ProfilePhotoEnhancer';
-import BackgroundImageGenerator from '@/components/BackgroundImageGenerator';
-import GuidedProfileEditor from '@/components/GuidedProfileEditor';
 import { toast } from 'sonner';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { sectionWeightages, generateMockProfileAnalysis, calculateOverallScore, ProfileSection as ProfileSectionType } from '@/utils/profileScoring';
+import { generateMockProfileAnalysis, calculateOverallScore, ProfileSection as ProfileSectionType } from '@/utils/profileScoring';
 
 const ProfileAnalyzer: React.FC = () => {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [isAnalyzed, setIsAnalyzed] = useState(false);
   const [profileUrl, setProfileUrl] = useState('');
-  const [profileContent, setProfileContent] = useState('');
   const [activeTab, setActiveTab] = useState('sections');
   const [sections, setSections] = useState<ProfileSectionType[]>([]);
   const [overallScore, setOverallScore] = useState(0);
@@ -30,7 +22,6 @@ const ProfileAnalyzer: React.FC = () => {
   useEffect(() => {
     console.log("Current active tab:", activeTab);
     
-    // Listen for custom tab change events from the ProfileSection component
     const handleTabChange = (e: CustomEvent) => {
       if (e.detail && e.detail.tabValue) {
         console.log("Received tab change event for:", e.detail.tabValue);
@@ -45,18 +36,20 @@ const ProfileAnalyzer: React.FC = () => {
   }, []);
 
   const handleAnalyze = () => {
-    if (!profileUrl && !profileContent) {
-      toast.error('Please enter either a LinkedIn URL or paste your profile content');
+    if (!profileUrl) {
+      toast.error('Please enter your LinkedIn profile URL');
+      return;
+    }
+
+    if (!profileUrl.includes('linkedin.com/in/')) {
+      toast.error('Please enter a valid LinkedIn profile URL');
       return;
     }
     
     setIsAnalyzing(true);
     
     setTimeout(() => {
-      const analysisInput = profileContent || 
-                           `LinkedIn URL: ${profileUrl} - We would fetch content from this URL in a real implementation`;
-      
-      const analyzedSections = generateMockProfileAnalysis(analysisInput);
+      const analyzedSections = generateMockProfileAnalysis(profileUrl);
       setSections(analyzedSections);
       setOverallScore(calculateOverallScore(analyzedSections));
       
@@ -67,56 +60,39 @@ const ProfileAnalyzer: React.FC = () => {
   };
 
   return (
-    <section id="profile-analyzer" className="py-20">
+    <section id="profile-analyzer" className="py-12">
       <div className="container-custom">
-        <div className="max-w-3xl mx-auto text-center mb-12">
+        <div className="max-w-3xl mx-auto text-center mb-8">
           <h2 className="section-heading">Analyze Your LinkedIn Profile</h2>
           <p className="text-lg text-muted-foreground">
             Get personalized recommendations to optimize your profile and stand out to recruiters
           </p>
-          <div className="mt-4 inline-block px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20 text-sm font-medium">
-            Calibrated with data from top 100 LinkedIn Voices
-          </div>
         </div>
         
         {!isAnalyzed ? (
-          <div className="max-w-2xl mx-auto glass-panel rounded-2xl p-8">
-            <div className="grid gap-6">
+          <div className="max-w-xl mx-auto glass-panel rounded-2xl p-6">
+            <div className="space-y-4">
               <div>
                 <label htmlFor="linkedin-url" className="label-text">
-                  LinkedIn Profile URL
+                  Enter Your LinkedIn Profile URL
                 </label>
-                <Input
-                  id="linkedin-url"
-                  className="input-field"
-                  placeholder="https://www.linkedin.com/in/username"
-                  value={profileUrl}
-                  onChange={(e) => setProfileUrl(e.target.value)}
-                />
-              </div>
-              
-              <div className="relative flex items-center py-2">
-                <div className="flex-grow border-t border-border"></div>
-                <span className="mx-4 flex-shrink text-muted-foreground text-sm">OR</span>
-                <div className="flex-grow border-t border-border"></div>
-              </div>
-              
-              <div>
-                <label htmlFor="profile-content" className="label-text">
-                  Paste Your Profile Content
-                </label>
-                <Textarea
-                  id="profile-content"
-                  className="input-field min-h-40"
-                  placeholder="Paste the content from your LinkedIn profile..."
-                  value={profileContent}
-                  onChange={(e) => setProfileContent(e.target.value)}
-                />
+                <div className="mt-2">
+                  <Input
+                    id="linkedin-url"
+                    className="input-field"
+                    placeholder="https://www.linkedin.com/in/username"
+                    value={profileUrl}
+                    onChange={(e) => setProfileUrl(e.target.value)}
+                  />
+                </div>
+                <p className="text-sm text-muted-foreground mt-2">
+                  Example: https://www.linkedin.com/in/your-username
+                </p>
               </div>
               
               <Button 
                 onClick={handleAnalyze} 
-                className="w-full mt-4"
+                className="w-full"
                 disabled={isAnalyzing}
               >
                 {isAnalyzing ? 'Analyzing...' : 'Analyze My Profile'}

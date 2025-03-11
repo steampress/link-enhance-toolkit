@@ -1,6 +1,5 @@
 
 import React, { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
 const Header: React.FC = () => {
@@ -33,7 +32,7 @@ const Header: React.FC = () => {
           <span className="font-semibold text-lg">LinkedPro</span>
         </div>
         
-        <nav className="hidden md:flex items-center space-x-8">
+        <nav className="flex items-center space-x-8">
           <a href="#features" className="text-foreground/80 hover:text-foreground transition-colors">
             Features
           </a>
@@ -44,13 +43,6 @@ const Header: React.FC = () => {
             Optimization
           </a>
         </nav>
-        
-        <div className="flex items-center space-x-4">
-          <Button variant="outline" className="hidden sm:inline-flex">
-            Log in
-          </Button>
-          <Button>Get Started</Button>
-        </div>
       </div>
     </header>
   );
