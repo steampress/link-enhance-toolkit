@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -29,12 +30,19 @@ const ProfileAnalyzer: React.FC = () => {
   useEffect(() => {
     console.log("Current active tab:", activeTab);
     
-    const allTabTriggers = document.querySelectorAll('[data-value]');
-    console.log("Available tabs:", Array.from(allTabTriggers).map(el => ({
-      value: el.getAttribute('data-value'),
-      text: el.textContent
-    })));
-  }, [activeTab]);
+    // Listen for custom tab change events from the ProfileSection component
+    const handleTabChange = (e: CustomEvent) => {
+      if (e.detail && e.detail.tabValue) {
+        console.log("Received tab change event for:", e.detail.tabValue);
+        setActiveTab(e.detail.tabValue);
+      }
+    };
+    
+    document.addEventListener('tabchange', handleTabChange as EventListener);
+    return () => {
+      document.removeEventListener('tabchange', handleTabChange as EventListener);
+    };
+  }, []);
 
   const handleAnalyze = () => {
     if (!profileUrl && !profileContent) {
@@ -154,7 +162,7 @@ const ProfileAnalyzer: React.FC = () => {
                 <TabsTrigger value="content" data-value="content">Content Editor</TabsTrigger>
               </TabsList>
               
-              <TabsContent value="sections">
+              <TabsContent value="sections" className="animate-fade-up">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {sections.map((section, index) => (
                     <ProfileSection
@@ -167,15 +175,15 @@ const ProfileAnalyzer: React.FC = () => {
                 </div>
               </TabsContent>
               
-              <TabsContent value="profile-photo">
+              <TabsContent value="profile-photo" className="animate-fade-up">
                 <ProfilePhotoEnhancer className="animate-fade-up" />
               </TabsContent>
               
-              <TabsContent value="background">
+              <TabsContent value="background" className="animate-fade-up">
                 <BackgroundImageGenerator className="animate-fade-up" />
               </TabsContent>
               
-              <TabsContent value="content">
+              <TabsContent value="content" className="animate-fade-up">
                 <div className="space-y-6 animate-fade-up">
                   <GuidedProfileEditor section="headline" />
                   <GuidedProfileEditor section="summary" />

@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -72,20 +73,41 @@ const ProfileSection: React.FC<ProfileSectionProps> = ({
     if (isExternal && url) {
       window.open(url, '_blank');
     } else if (tab) {
-      const tabElement = document.querySelector(`[data-state][data-value="${tab}"]`);
-      if (tabElement instanceof HTMLElement) {
-        const tabsRoot = tabElement.closest('[role="tablist"]');
-        if (tabsRoot) {
-          const currentActive = tabsRoot.querySelector('[data-state="active"]');
-          if (currentActive) {
-            currentActive.setAttribute('data-state', 'inactive');
-          }
-          tabElement.setAttribute('data-state', 'active');
-          tabElement.click();
-          
-          const tabContent = document.querySelector(`[role="tabpanel"][data-state]`);
-          if (tabContent) {
-            tabContent.setAttribute('data-state', 'active');
+      console.log(`Attempting to switch to tab: ${tab}`);
+      
+      // Get the tabs root and its value
+      const tabsList = document.querySelector('[data-tabs="profile-analyzer"]');
+      if (!tabsList) {
+        console.error("Tabs container not found");
+        return;
+      }
+      
+      // Find the correct tab trigger
+      const tabTrigger = tabsList.querySelector(`[data-value="${tab}"]`);
+      if (tabTrigger instanceof HTMLElement) {
+        console.log(`Found tab trigger for ${tab}, clicking it...`);
+        
+        // Create and dispatch a custom event that ProfileAnalyzer will listen for
+        const event = new CustomEvent('tabchange', { 
+          detail: { tabValue: tab },
+          bubbles: true
+        });
+        tabTrigger.dispatchEvent(event);
+        
+        // Also perform a direct click for backup
+        tabTrigger.click();
+      } else {
+        console.error(`Tab trigger for ${tab} not found`);
+        
+        // Fallback method - try to find the TabsTrigger by its content
+        const allTriggers = document.querySelectorAll('[role="tab"]');
+        for (const trigger of allTriggers) {
+          if (trigger.textContent?.toLowerCase().includes(tab.replace('-', ' '))) {
+            console.log(`Found tab by content: ${trigger.textContent}`);
+            if (trigger instanceof HTMLElement) {
+              trigger.click();
+              break;
+            }
           }
         }
       }
