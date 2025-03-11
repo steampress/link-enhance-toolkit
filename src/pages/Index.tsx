@@ -6,6 +6,7 @@ import OptimizationTips from '@/components/OptimizationTips';
 import Footer from '@/components/Footer';
 import BlurBackground from '@/components/BlurBackground';
 import FeatureCard from '@/components/FeatureCard';
+import TestimonialCarousel from '@/components/TestimonialCarousel';
 
 const Index = () => {
   const features = [
@@ -103,42 +104,19 @@ const Index = () => {
         <section id="testimonials" className="py-20">
           <div className="container-custom">
             <div className="glass-panel rounded-2xl p-8 md:p-12">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-                <div className="space-y-6">
-                  <div className="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20 text-sm font-medium">
-                    Ready to Stand Out?
-                  </div>
-                  <h2 className="text-3xl md:text-4xl font-bold tracking-tight">
-                    Transform Your LinkedIn Profile Today
-                  </h2>
-                  <p className="text-muted-foreground">
-                    Join thousands of professionals who have enhanced their LinkedIn presence and attracted more opportunities.
-                  </p>
+              <div className="text-center mb-10">
+                <div className="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20 text-sm font-medium mb-4">
+                  Success Stories
                 </div>
-                
-                <div className="flex justify-center md:justify-end">
-                  <div className="relative">
-                    <div className="absolute -z-10 inset-0 bg-gradient-radial from-accent/10 to-transparent blur-xl opacity-70" />
-                    <div className="glass-card p-6 max-w-sm text-left">
-                      <div className="flex items-start space-x-4 mb-6">
-                        <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary shrink-0">
-                          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M8 12H8.01M12 12H12.01M16 12H16.01M21 12C21 16.418 16.97 20 12 20C10.5286 20 9.14629 19.6916 7.94363 19.1486C7.60579 19.0096 7.43687 18.9401 7.32542 18.9392C7.21397 18.9382 7.13063 18.9668 6.96394 19.0239C6.79726 19.081 6.5967 19.1973 6.19558 19.4299L3.5 21L4.5286 17.9142C4.75212 17.2184 4.86387 16.8705 4.85465 16.6701C4.84542 16.4698 4.82222 16.3755 4.73449 16.1379C4.3126 15.1952 4.07103 14.1404 4.07103 13.034C4.07103 8.616 7.9386 5 12.1585 5C15.5305 5 18.4476 7.17615 19.6178 10.1256" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                          </svg>
-                        </div>
-                        <div>
-                          <div className="text-sm text-muted-foreground">Testimonial</div>
-                          <h4 className="font-semibold">Sarah Johnson</h4>
-                          <p className="text-sm text-muted-foreground">Marketing Director</p>
-                        </div>
-                      </div>
-                      <p className="text-sm text-muted-foreground">
-                        "After optimizing my LinkedIn profile with LinkedPro, I received 3x more recruiter messages and landed my dream job within a month!"
-                      </p>
-                    </div>
-                  </div>
-                </div>
+                <h2 className="text-3xl md:text-4xl font-bold tracking-tight">
+                  What Our Users Are Saying
+                </h2>
+                <p className="mt-4 text-muted-foreground max-w-2xl mx-auto">
+                  Join thousands of professionals who have enhanced their LinkedIn presence and attracted more opportunities.
+                </p>
               </div>
+              
+              <TestimonialCarousel />
             </div>
           </div>
         </section>

@@ -32,15 +32,15 @@ const Header: React.FC = () => {
           <span className="font-semibold text-lg">LinkedPro</span>
         </div>
         
-        <nav className="flex items-center space-x-8">
+        <nav className="hidden md:flex items-center space-x-8">
           <a href="#features" className="text-foreground/80 hover:text-primary transition-colors">
             Features
           </a>
           <a href="#profile-analyzer" className="text-foreground/80 hover:text-primary transition-colors">
             Profile Analyzer
           </a>
-          <a href="#optimization" className="text-foreground/80 hover:text-primary transition-colors">
-            Optimization
+          <a href="#testimonials" className="text-foreground/80 hover:text-primary transition-colors">
+            Testimonials
           </a>
         </nav>
       </div>
