@@ -15,31 +15,31 @@ export const sectionWeightages: SectionWeight[] = [
   {
     id: 'photo',
     title: 'Profile Photo & Background',
-    weight: 0.07, // Maintained
+    weight: 0.15, // Increased from 0.07 to 0.15
     description: 'Professional photo and relevant background image'
   },
   {
     id: 'headline',
     title: 'Headline & Summary',
-    weight: 0.22, // Maintained
+    weight: 0.20, // Adjusted from 0.22 to 0.20
     description: 'Compelling headline and comprehensive summary'
   },
   {
     id: 'experience',
     title: 'Experience & Accomplishments',
-    weight: 0.25, // Maintained
+    weight: 0.23, // Adjusted from 0.25 to 0.23
     description: 'Detailed work history with quantifiable results'
   },
   {
     id: 'skills',
     title: 'Skills & Endorsements',
-    weight: 0.08, // Maintained
+    weight: 0.07, // Adjusted from 0.08 to 0.07
     description: 'Relevant skills with strong endorsements'
   },
   {
     id: 'activity',
     title: 'Content & Activity',
-    weight: 0.38, // Significantly increased
+    weight: 0.35, // Adjusted from 0.38 to 0.35
     description: 'Regular posting and engagement'
   }
 ];
@@ -69,8 +69,8 @@ export const calculateOverallScore = (sections: ProfileSection[]): number => {
   // Calculate the sum of all weighted scores
   const totalScore = weightedScores.reduce((sum, score) => sum + score, 0);
   
-  // Add a small baseline boost to all scores (5%)
-  const boostedScore = Math.min(100, totalScore + 5);
+  // Add a small baseline boost to all scores (8%) - increased from 5%
+  const boostedScore = Math.min(100, totalScore + 8);
   
   // Return rounded integer score
   return Math.round(boostedScore);
@@ -223,7 +223,7 @@ const detectActivityLevel = (content: string): number => {
     {regex: /post(?:s|ed|ing)?\s+weekly/i, weight: 8},
     {regex: /weekly\s+post(?:s|ing)?/i, weight: 8},
     {regex: /post(?:s|ed|ing)?\s+(\d+)\s+times\s+(?:a|per)\s+week/i, weight: 9},
-    {regex: /(\d+)\s+post(?:s|ing)?\s+(?:a|per)\s+week/i, weight: 9},
+    {regex: /(\d+)\s+post(?:s|ed|ing)?\s+(?:a|per)\s+week/i, weight: 9},
     
     {regex: /post(?:s|ed|ing)?\s+bi-weekly/i, weight: 7},
     {regex: /post(?:s|ed|ing)?\s+every\s+other\s+week/i, weight: 7},
@@ -231,7 +231,7 @@ const detectActivityLevel = (content: string): number => {
     {regex: /post(?:s|ed|ing)?\s+monthly/i, weight: 5},
     {regex: /monthly\s+post(?:s|ing)?/i, weight: 5},
     {regex: /post(?:s|ed|ing)?\s+(\d+)\s+times\s+(?:a|per)\s+month/i, weight: 6},
-    {regex: /(\d+)\s+post(?:s|ing)?\s+(?:a|per)\s+month/i, weight: 6},
+    {regex: /(\d+)\s+post(?:s|ed|ing)?\s+(?:a|per)\s+month/i, weight: 6},
     
     {regex: /regular(?:ly)?\s+post(?:s|ing)?/i, weight: 7},
     {regex: /frequent(?:ly)?\s+post(?:s|ing)?/i, weight: 7},

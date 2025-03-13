@@ -65,6 +65,10 @@ const ProfileAnalyzer: React.FC = () => {
     }, 2500);
   };
 
+  const handleProfilePhotoTabClick = () => {
+    window.open('https://picofme.io/', '_blank');
+  };
+
   return (
     <section id="profile-analyzer" className="py-12">
       <div className="container-custom">
@@ -109,21 +113,13 @@ const ProfileAnalyzer: React.FC = () => {
           <div className="animate-fade-up">
             <div className="glass-panel rounded-2xl p-6 mb-6">
               <div className="flex flex-col md:flex-row items-center gap-4">
-                <ProfileScore score={overallScore} size="md" />
+                <ProfileScore score={overallScore} size="lg" />
                 <div className="text-center md:text-left md:flex-1">
                   <h3 className="text-xl font-semibold mb-1">Your Profile Score</h3>
                   <p className="text-muted-foreground text-sm mb-3">
-                    Based on our analysis calibrated with top LinkedIn voices, your profile scores {overallScore}%. Here's how we calculate your score:
+                    Based on our analysis calibrated with top LinkedIn voices, your profile scores {overallScore}%. Here's how to improve your score:
                   </p>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                    {sectionWeightages.map((section) => (
-                      <div key={section.id} className="bg-secondary/10 px-2 py-1 rounded text-xs flex items-center justify-between">
-                        <span className="font-medium truncate mr-1">{section.title.split(' ')[0]}</span>
-                        <span className="text-muted-foreground whitespace-nowrap">{Math.round(section.weight * 100)}%</span>
-                      </div>
-                    ))}
-                  </div>
-                  <Button className="mt-4 w-full sm:w-auto" onClick={() => setIsAnalyzed(false)}>
+                  <Button className="mt-2 w-full sm:w-auto" onClick={() => setIsAnalyzed(false)}>
                     Analyze Another Profile
                   </Button>
                 </div>
@@ -139,7 +135,7 @@ const ProfileAnalyzer: React.FC = () => {
             >
               <TabsList className="grid w-full grid-cols-1 md:grid-cols-4 mb-4">
                 <TabsTrigger value="sections" data-value="sections">Profile Sections</TabsTrigger>
-                <TabsTrigger value="profile-photo" data-value="profile-photo">Profile Photo</TabsTrigger>
+                <TabsTrigger value="profile-photo" data-value="profile-photo" onClick={handleProfilePhotoTabClick}>Profile Photo</TabsTrigger>
                 <TabsTrigger value="background" data-value="background">Background</TabsTrigger>
                 <TabsTrigger value="content" data-value="content">Content Editor</TabsTrigger>
               </TabsList>

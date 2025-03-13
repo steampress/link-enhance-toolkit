@@ -44,18 +44,18 @@ const ProfileScore: React.FC<ProfileScoreProps> = ({
 
   const sizesMap = {
     sm: {
-      container: 'w-14 h-14',
-      text: 'text-lg',
+      container: 'w-16 h-16',
+      text: 'text-xl',
       thickness: 'border-3'
     },
     md: {
-      container: 'w-20 h-20',
+      container: 'w-24 h-24',
       text: 'text-2xl',
       thickness: 'border-5'
     },
     lg: {
-      container: 'w-28 h-28',
-      text: 'text-3xl',
+      container: 'w-32 h-32',
+      text: 'text-4xl',
       thickness: 'border-6'
     },
   };
