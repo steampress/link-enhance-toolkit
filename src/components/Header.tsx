@@ -45,7 +45,7 @@ const Header: React.FC = () => {
           <div className="w-9 h-9 rounded-md bg-primary flex items-center justify-center">
             <span className="text-white font-bold text-xl">L</span>
           </div>
-          <span className="font-semibold text-lg">LinkedPro</span>
+          <span className="font-semibold text-lg">Linkalicious</span>
         </div>
         
         <nav className="hidden md:flex items-center space-x-8">

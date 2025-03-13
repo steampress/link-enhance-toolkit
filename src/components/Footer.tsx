@@ -13,10 +13,10 @@ const Footer: React.FC = () => {
               <div className="w-8 h-8 rounded-md bg-primary flex items-center justify-center">
                 <span className="text-white font-bold text-lg">L</span>
               </div>
-              <span className="font-semibold">LinkedPro</span>
+              <span className="font-semibold">Linkalicious</span>
             </div>
             <p className="text-muted-foreground mb-6 max-w-md">
-              LinkedPro helps professionals optimize their LinkedIn profiles to attract recruiters, build connections, and advance their careers.
+              Linkalicious helps professionals optimize their LinkedIn profiles to attract recruiters, build connections, and advance their careers.
             </p>
             <div className="flex space-x-4">
               <Button variant="outline" size="icon" className="w-8 h-8">
@@ -46,7 +46,7 @@ const Footer: React.FC = () => {
         
         <div className="border-t border-border mt-8 pt-6 flex flex-col sm:flex-row justify-between items-center">
           <p className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} LinkedPro. All rights reserved.
+            © {new Date().getFullYear()} Linkalicious. All rights reserved.
           </p>
           <div className="flex space-x-6 mt-4 sm:mt-0">
             <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">

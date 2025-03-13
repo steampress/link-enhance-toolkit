@@ -20,7 +20,7 @@ const Hero: React.FC = () => {
             </div>
             
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight">
-              Transform Your <span className="text-primary">LinkedIn</span> Profile
+              Making your <span className="text-primary">LinkedIn</span> as tasty as your talent
             </h1>
             
             <p className="text-xl text-muted-foreground max-w-lg">
