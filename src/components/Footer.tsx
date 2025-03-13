@@ -5,10 +5,10 @@ import { Link } from 'react-router-dom';
 
 const Footer: React.FC = () => {
   return (
-    <footer className="py-12 border-t border-border">
+    <footer className="py-10 border-t border-border">
       <div className="container-custom">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-          <div className="col-span-1">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div className="col-span-1 md:col-span-3">
             <div className="flex items-center space-x-2 mb-6">
               <div className="w-8 h-8 rounded-md bg-primary flex items-center justify-center">
                 <span className="text-white font-bold text-lg">L</span>
@@ -34,7 +34,7 @@ const Footer: React.FC = () => {
             </div>
           </div>
           
-          <div>
+          <div className="md:text-right">
             <h4 className="font-semibold mb-4">Quick Links</h4>
             <ul className="space-y-2">
               <li><a href="#features" className="text-muted-foreground hover:text-primary transition-colors">Features</a></li>
@@ -44,7 +44,7 @@ const Footer: React.FC = () => {
           </div>
         </div>
         
-        <div className="border-t border-border mt-10 pt-8 flex flex-col sm:flex-row justify-between items-center">
+        <div className="border-t border-border mt-8 pt-6 flex flex-col sm:flex-row justify-between items-center">
           <p className="text-sm text-muted-foreground">
             © {new Date().getFullYear()} LinkedPro. All rights reserved.
           </p>

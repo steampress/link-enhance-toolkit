@@ -1,3 +1,4 @@
+
 import React from 'react';
 import Header from '@/components/Header';
 import Hero from '@/components/Hero';
@@ -68,18 +69,18 @@ const Index = () => {
   ];
 
   return (
-    <div className="relative min-h-screen">
+    <div className="relative min-h-screen w-full overflow-hidden">
       <BlurBackground />
       <Header />
       
-      <main>
+      <main className="w-full">
         <Hero />
         
         <ProfileAnalyzer />
         
-        <section id="features" className="py-20">
+        <section id="features" className="py-12">
           <div className="container-custom">
-            <div className="max-w-3xl mx-auto text-center mb-16">
+            <div className="max-w-3xl mx-auto text-center mb-10">
               <h2 className="section-heading">Optimize Every Aspect of Your Profile</h2>
               <p className="text-lg text-muted-foreground">
                 Our comprehensive toolkit helps you enhance your LinkedIn presence and maximize opportunities
@@ -101,9 +102,9 @@ const Index = () => {
         
         <OptimizationTips />
         
-        <section id="testimonials" className="py-20 bg-gradient-to-b from-white to-blue-50">
+        <section id="testimonials" className="py-12 bg-gradient-to-b from-white to-blue-50">
           <div className="container-custom">
-            <div className="max-w-3xl mx-auto text-center mb-12">
+            <div className="max-w-3xl mx-auto text-center mb-8">
               <div className="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20 text-sm font-medium mb-4">
                 Success Stories
               </div>
