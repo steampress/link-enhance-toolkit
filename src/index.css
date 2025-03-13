@@ -99,11 +99,11 @@
 
 @layer components {
   .glass-panel {
-    @apply bg-white/70 backdrop-blur-md border border-white/20 shadow-glass;
+    @apply bg-white/90 backdrop-blur-md border border-white/30 shadow-lg;
   }
   
   .glass-card {
-    @apply rounded-xl bg-white/80 backdrop-blur-sm shadow-soft border border-white/30 transition-all duration-300 hover:shadow-glass;
+    @apply rounded-xl bg-white/90 backdrop-blur-sm shadow-md border border-white/30 transition-all duration-300 hover:shadow-lg;
   }
   
   .section-heading {

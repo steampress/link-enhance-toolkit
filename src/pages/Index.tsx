@@ -101,23 +101,21 @@ const Index = () => {
         
         <OptimizationTips />
         
-        <section id="testimonials" className="py-20">
+        <section id="testimonials" className="py-20 bg-gradient-to-b from-white to-blue-50">
           <div className="container-custom">
-            <div className="glass-panel rounded-2xl p-8 md:p-12">
-              <div className="text-center mb-10">
-                <div className="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20 text-sm font-medium mb-4">
-                  Success Stories
-                </div>
-                <h2 className="text-3xl md:text-4xl font-bold tracking-tight">
-                  What Our Users Are Saying
-                </h2>
-                <p className="mt-4 text-muted-foreground max-w-2xl mx-auto">
-                  Join thousands of professionals who have enhanced their LinkedIn presence and attracted more opportunities.
-                </p>
+            <div className="max-w-3xl mx-auto text-center mb-12">
+              <div className="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20 text-sm font-medium mb-4">
+                Success Stories
               </div>
-              
-              <TestimonialCarousel />
+              <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">
+                What Our Users Are Saying
+              </h2>
+              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                Join thousands of professionals who have enhanced their LinkedIn presence and attracted more opportunities.
+              </p>
             </div>
+            
+            <TestimonialCarousel />
           </div>
         </section>
       </main>
