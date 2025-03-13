@@ -55,7 +55,7 @@ const ProfileScore: React.FC<ProfileScoreProps> = ({
     },
     lg: {
       container: 'w-32 h-32',
-      text: 'text-4xl',
+      text: 'text-5xl',  // Increased from text-4xl
       thickness: 'border-6'
     },
   };

@@ -151,7 +151,7 @@ const ProfilePhotoEnhancer: React.FC<ProfilePhotoEnhancerProps> = ({ className }
     <div className={`glass-panel rounded-2xl p-6 ${className}`}>
       <h3 className="text-xl font-semibold mb-4">Profile Photo Enhancer</h3>
       <p className="text-muted-foreground mb-6">
-        Upload your profile photo to get an enhanced version with background removed for a professional look.
+        After testing multiple free tools, I found <a href="https://picofme.io/" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">picofme.io</a> to be the most reliable and easy to use. Check it out for yourself! If you just want minor polishing, use the tool below.
       </p>
 
       <input

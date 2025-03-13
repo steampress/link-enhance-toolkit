@@ -65,10 +65,6 @@ const ProfileAnalyzer: React.FC = () => {
     }, 2500);
   };
 
-  const handleProfilePhotoTabClick = () => {
-    window.open('https://picofme.io/', '_blank');
-  };
-
   return (
     <section id="profile-analyzer" className="py-12">
       <div className="container-custom">
@@ -135,7 +131,7 @@ const ProfileAnalyzer: React.FC = () => {
             >
               <TabsList className="grid w-full grid-cols-1 md:grid-cols-4 mb-4">
                 <TabsTrigger value="sections" data-value="sections">Profile Sections</TabsTrigger>
-                <TabsTrigger value="profile-photo" data-value="profile-photo" onClick={handleProfilePhotoTabClick}>Profile Photo</TabsTrigger>
+                <TabsTrigger value="profile-photo" data-value="profile-photo">Profile Photo</TabsTrigger>
                 <TabsTrigger value="background" data-value="background">Background</TabsTrigger>
                 <TabsTrigger value="content" data-value="content">Content Editor</TabsTrigger>
               </TabsList>

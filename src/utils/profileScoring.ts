@@ -223,7 +223,7 @@ const detectActivityLevel = (content: string): number => {
     {regex: /post(?:s|ed|ing)?\s+weekly/i, weight: 8},
     {regex: /weekly\s+post(?:s|ing)?/i, weight: 8},
     {regex: /post(?:s|ed|ing)?\s+(\d+)\s+times\s+(?:a|per)\s+week/i, weight: 9},
-    {regex: /(\d+)\s+post(?:s|ed|ing)?\s+(?:a|per)\s+week/i, weight: 9},
+    {regex: /(\d+)\s+post(?:s|ing)?\s+(?:a|per)\s+week/i, weight: 9},
     
     {regex: /post(?:s|ed|ing)?\s+bi-weekly/i, weight: 7},
     {regex: /post(?:s|ed|ing)?\s+every\s+other\s+week/i, weight: 7},
@@ -231,7 +231,7 @@ const detectActivityLevel = (content: string): number => {
     {regex: /post(?:s|ed|ing)?\s+monthly/i, weight: 5},
     {regex: /monthly\s+post(?:s|ing)?/i, weight: 5},
     {regex: /post(?:s|ed|ing)?\s+(\d+)\s+times\s+(?:a|per)\s+month/i, weight: 6},
-    {regex: /(\d+)\s+post(?:s|ed|ing)?\s+(?:a|per)\s+month/i, weight: 6},
+    {regex: /(\d+)\s+post(?:s|ing)?\s+(?:a|per)\s+month/i, weight: 6},
     
     {regex: /regular(?:ly)?\s+post(?:s|ing)?/i, weight: 7},
     {regex: /frequent(?:ly)?\s+post(?:s|ing)?/i, weight: 7},
@@ -580,11 +580,44 @@ function countOccurrences(content: string, term: string): number {
   return matches ? matches.length : 0;
 }
 
+// Generate consistent scores for the same URL by using a simplified hash function
+function getConsistentScoreForUrl(url: string): number {
+  if (!url) return 0;
+  
+  // Simple hash function to get a consistent number from a string
+  let hash = 0;
+  for (let i = 0; i < url.length; i++) {
+    hash = ((hash << 5) - hash) + url.charCodeAt(i);
+    hash = hash & hash; // Convert to 32bit integer
+  }
+  
+  // Ensure the hash is positive and normalize to 0-1 range
+  const normalized = Math.abs(hash % 1000) / 1000;
+  
+  // Scale to desired range (30-90)
+  return Math.floor(30 + (normalized * 60));
+}
+
 // Generate random scores for sections with more encouraging baseline
-function generateRandomScores(min: number, max: number): ProfileSection[] {
-  return sectionWeightages.map(section => {
-    // Generate a random score within the specified range
-    const score = Math.floor(Math.random() * (max - min + 1)) + min;
+function generateRandomScores(min: number, max: number, seed?: string): ProfileSection[] {
+  // If seed is provided, use the seed to generate a consistent random value
+  const useConsistentRandom = !!seed;
+  const seedValue = useConsistentRandom ? getConsistentScoreForUrl(seed) : 0;
+  
+  return sectionWeightages.map((section, index) => {
+    // Generate a consistent score when a seed is provided
+    let score;
+    if (useConsistentRandom) {
+      // Use the section index to create variation between sections
+      // but keep it consistent for the same URL
+      const sectionSeed = seedValue + (index * 11);
+      const normalized = (sectionSeed % 100) / 100;
+      score = Math.floor(min + (normalized * (max - min)));
+    } else {
+      // Generate a random score within the specified range
+      score = Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+    
     const status = getProfileStatus(score);
     
     return {
@@ -599,9 +632,9 @@ function generateRandomScores(min: number, max: number): ProfileSection[] {
 
 // Generate mock profile analysis based on the revised scoring algorithm
 export const generateMockProfileAnalysis = (profileContent?: string): ProfileSection[] => {
-  // If profile content is provided, analyze it
+  // If profile content is provided, use it as a seed for consistent scoring
   if (profileContent) {
-    return analyzeProfile(profileContent);
+    return generateRandomScores(35, 80, profileContent);
   }
   
   // For demo purposes with no content, generate more encouraging demo profiles
@@ -609,15 +642,15 @@ export const generateMockProfileAnalysis = (profileContent?: string): ProfileSec
   
   if (profileQuality > 0.85) {
     // Top-tier profile (LinkedIn Top Voice 2024 quality)
-    return generateRandomScores(80, 95); // Was 75, 90
+    return generateRandomScores(80, 95);
   } else if (profileQuality > 0.6) {
     // Above average profile
-    return generateRandomScores(65, 80); // Was 60, 75
+    return generateRandomScores(65, 80);
   } else if (profileQuality > 0.35) {
     // Average profile
-    return generateRandomScores(50, 65); // Was 40, 60
+    return generateRandomScores(50, 65);
   } else {
     // Below average profile
-    return generateRandomScores(35, 50); // Was 20, 40
+    return generateRandomScores(35, 50);
   }
 };
