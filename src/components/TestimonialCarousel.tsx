@@ -99,23 +99,22 @@ const TestimonialCarousel: React.FC = () => {
   }, []);
 
   return (
-    <div className="relative w-full overflow-hidden py-4">
+    <div className="relative w-full py-4">
       <div className="flex justify-center">
-        <div className="relative max-w-2xl w-full">
+        <div className="relative max-w-2xl w-full" style={{ minHeight: "300px" }}>
           {testimonials.map((testimonial, index) => (
             <div
               key={testimonial.id}
               className={cn(
                 "absolute top-0 left-0 w-full transition-all duration-500 ease-in-out",
                 index === activeIndex 
-                  ? "opacity-100 translate-x-0" 
+                  ? "opacity-100 translate-x-0 z-10" 
                   : index < activeIndex 
-                    ? "opacity-0 -translate-x-full" 
-                    : "opacity-0 translate-x-full"
+                    ? "opacity-0 -translate-x-full z-0" 
+                    : "opacity-0 translate-x-full z-0"
               )}
-              style={{ zIndex: index === activeIndex ? 10 : 0 }}
             >
-              <Card className="shadow-lg border border-primary/10 rounded-xl bg-white p-6">
+              <Card className="shadow-lg border border-primary/10 rounded-xl bg-white p-6 h-full">
                 <div className="flex items-start space-x-4 mb-4">
                   <div className={cn("w-12 h-12 rounded-full flex items-center justify-center shrink-0", testimonial.avatarColor)}>
                     {testimonial.avatarIcon}
