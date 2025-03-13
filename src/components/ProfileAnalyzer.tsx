@@ -1,9 +1,15 @@
+
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { generateMockProfileAnalysis, calculateOverallScore, ProfileSection as ProfileSectionType } from '@/utils/profileScoring';
+import { generateMockProfileAnalysis, calculateOverallScore, ProfileSection as ProfileSectionType, sectionWeightages } from '@/utils/profileScoring';
+import ProfileScore from '@/components/ui/ProfileScore';
+import ProfileSection from '@/components/ProfileSection';
+import ProfilePhotoEnhancer from '@/components/ProfilePhotoEnhancer';
+import BackgroundImageGenerator from '@/components/BackgroundImageGenerator';
+import GuidedProfileEditor from '@/components/GuidedProfileEditor';
 
 const ProfileAnalyzer: React.FC = () => {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
